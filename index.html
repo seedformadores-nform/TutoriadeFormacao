@@ -3,14 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Organograma - Tutoria de Formação 32 NREs - Formadores em Ação</title>
-    <!-- Tailwind CSS para o visual -->
+    <title>Organograma - Tutores de Formação dos NREs | Formadores em Ação</title>
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- React e Babel para rodar o código no navegador -->
+    <!-- React e Babel -->
     <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
         body { font-family: 'Inter', sans-serif; }
@@ -21,414 +20,48 @@
             .grid { display: block !important; }
             .grid > div { margin-bottom: 20px !important; page-break-inside: avoid; }
         }
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: #f8fafc; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 9999px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
     </style>
 </head>
-<body class="bg-[#f1f5f9] text-slate-800">
+<body class="bg-[#f1f5f9] text-slate-800 antialiased selection:bg-pink-100 selection:text-pink-600">
     <div id="root"></div>
 
     <script type="text/babel">
-        const { useState, useMemo, useEffect } = React;
+        const { useState, useMemo } = React;
 
         // Ícones em SVG
-        const IconSearch = () => <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>;
+        const IconSearch = () => <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>;
         const IconZoomIn = () => <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"/><line x1="11" x2="11" y1="8" y2="14"/><line x1="8" x2="14" y1="11" y2="11"/></svg>;
         const IconZoomOut = () => <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"/><line x1="8" x2="14" y1="11" y2="11"/></svg>;
-        const IconPrinter = () => <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M6 9V2h12v7"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect width="12" height="8" x="6" y="14"/></svg>;
+        const IconPrinter = () => <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M6 9V2h12v7"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect width="12" height="8" x="6" y="14"/></svg>;
         const IconX = () => <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>;
-        const IconMail = () => <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>;
-        const IconPhone = () => <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>;
-        const IconChevronDown = () => <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m6 9 6 6 6-9"/></svg>;
-        const IconChevronRight = () => <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m9 18 6-6-6-6"/></svg>;
-        const IconBuilding = () => <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="16" height="20" x="4" y="2" rx="2" ry="2"/><path d="M9 22v-4h6v4"/><path d="M8 6h.01"/><path d="M16 6h.01"/><path d="M8 10h.01"/><path d="M16 10h.01"/><path d="M8 14h.01"/><path d="M16 14h.01"/><path d="M8 18h.01"/><path d="M16 18h.01"/></svg>;
-        const IconHeart = ({ fill = "currentColor" }) => <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill={fill} stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>;
-        const IconSmile = () => <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>;
-        const IconHandshake = () => <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m11 17 2 2a1 1 0 0 0 1.4 0l4.3-4.3a1 1 0 0 0 0-1.4l-2.6-2.6a1 1 0 0 0-1.4 0L13 12"/><path d="m14 10 1.5-1.5a1 1 0 0 0 0-1.4L13.7 5.3a1 1 0 0 0-1.4 0L10.5 7"/><path d="m7 15-1.5-1.5a1 1 0 0 1 0-1.4L11 6.5"/><path d="m2 11 4.5 4.5a2 2 0 0 0 2.8 0L14 11"/><path d="m9 19-3-3"/></svg>;
-        const IconMapPin = () => <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>;
-        const IconChevronLeft = () => <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m15 18-6-6 6-6"/></svg>;
-        const IconSend = () => <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>;
+        const IconMail = () => <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>;
+        const IconPhone = () => <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>;
+        const IconMapPin = () => <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>;
+        const IconArrowLeft = () => <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>;
 
         const COLORS = {
-            blue: '#0055b8',
-            navy: '#0f2942',
-            purple: '#6d28d9',
-            green: '#008744',
-            amber: '#d97706',
-            teal: '#0d9488',
-            rose: '#e11d48',
+            seedGreen: '#00843D',
+            paranaBlue: '#005CA9',
+            emerald: '#10b981',
+            amber: '#f59e0b',
+            rose: '#ec4899',
             slate: '#64748b'
         };
-
-        // Dados oficiais e reais dos 32 NREs e seus respectivos Tutores de Formação
-        const nresData = [
-            {
-                id: '01',
-                name: 'Apucarana',
-                color: COLORS.green,
-                email: 'nreapu_formadores@escola.pr.gov.br',
-                phone: '(43) 3420 1633',
-                tutores: [
-                    { id: 'apu_1', name: 'Andréia', role: 'Tutora de Formação', driveUrl: 'https://drive.google.com/file/d/1bx_RQDQgFrja8ThXH-3LMp99Wb-PZB-6/view?usp=drive_link' },
-                    { id: 'apu_2', name: 'Núbia', role: 'Tutora de Formação', driveUrl: 'https://drive.google.com/file/d/1HhyhxsaC5IX6dAl_rdAKhL4WzHF3Q-Vj/view?usp=drive_link' },
-                    { id: 'apu_3', name: 'Cláudia', role: 'Tutora de Formação', driveUrl: 'https://drive.google.com/file/d/1h0Q0yTQLal9ikDOvQuydSnnbHo8J3fED/view?usp=drive_link' }
-                ]
-            },
-            {
-                id: '02',
-                name: 'Área Metropolitana Norte',
-                color: COLORS.blue,
-                email: 'nreamn_formadores@escola.pr.gov.br',
-                phone: '(41) 3251-6583',
-                tutores: [
-                    { id: 'amn_1', name: 'Luana', role: 'Tutora de Formação', driveUrl: 'https://drive.google.com/file/d/1lo308nevFij0QJfgcjO4DB8_Zc13vBx1/view?usp=drive_link' },
-                    { id: 'amn_2', name: 'Valéria', role: 'Tutora de Formação', driveUrl: 'https://drive.google.com/file/d/1RG8zMlzjnDo-_J5jNoGHc5StCm-NVUoV/view?usp=drive_link' },
-                    { id: 'amn_3', name: 'Francis', role: 'Tutor de Formação', driveUrl: 'https://drive.google.com/file/d/1N6gmvMcdjXovw91hCe6WSXZ73-0DUmsZ/view?usp=drive_link' }
-                ]
-            },
-            {
-                id: '03',
-                name: 'Área Metropolitana Sul',
-                color: COLORS.blue,
-                email: 'nreams_formadores@escola.pr.gov.br',
-                phone: '(41) 3277-7595 ramal 7595',
-                tutores: [
-                    { id: 'ams_1', name: 'Ulisses', role: 'Tutor de Formação', driveUrl: 'https://drive.google.com/file/d/1taxZC62jpEm7_uansRsCAsQq9XHpkar0/view?usp=sharing' },
-                    { id: 'ams_2', name: 'Luciana', role: 'Tutora de Formação', driveUrl: 'https://drive.google.com/file/d/1_81cJBXk5TB4o9S1ssxts2VU55oAQxT6/view?usp=drive_link' }
-                ]
-            },
-            {
-                id: '04',
-                name: 'Assis Chateaubriand',
-                color: COLORS.amber,
-                email: 'nreasd_formadores@escola.pr.gov.br',
-                phone: '(44) 3528-8337',
-                tutores: [
-                    { id: 'asd_1', name: 'Silvana', role: 'Tutora de Formação', driveUrl: 'https://drive.google.com/file/d/1vAdEf56uVrtW4faD9ZAx8k9thFXmvYoB/view?usp=sharing' },
-                    { id: 'asd_2', name: 'Sonia', role: 'Tutora de Formação', driveUrl: 'https://drive.google.com/file/d/1Gc_a9XAF9M3jWu-PZ-MXqSyu8w2OAfWN/view?usp=drive_link' }
-                ]
-            },
-            {
-                id: '05',
-                name: 'Campo Mourão',
-                color: COLORS.teal,
-                email: 'nrecpm_formadores@escola.pr.gov.br',
-                phone: '(44) 3518-2802 / 3518-2807',
-                tutores: [
-                    { id: 'cpm_1', name: 'Marinalva', role: 'Tutora de Formação', driveUrl: 'https://drive.google.com/file/d/1y3uoGgqnwtIs1PiadIbxuDejLSUY-ynu/view?usp=sharing' },
-                    { id: 'cpm_2', name: 'Patricia', role: 'Tutora de Formação', driveUrl: 'https://drive.google.com/file/d/1gojXt5BYPkEr4gI6pDS2O8948R1GwU4F/view?usp=drive_link' }
-                ]
-            },
-            {
-                id: '06',
-                name: 'Cascavel',
-                color: COLORS.amber,
-                email: 'nrecsc_formadores@escola.pr.gov.br',
-                phone: '(45) 3333-2830',
-                tutores: [
-                    { id: 'csc_1', name: 'Aline', role: 'Tutora de Formação', driveUrl: 'https://drive.google.com/file/d/10i7NnLVa554qM2lkYsuc_h07E0d-sOBW/view?usp=drive_link' },
-                    { id: 'csc_2', name: 'Luciana', role: 'Tutora de Formação', driveUrl: 'https://drive.google.com/file/d/1kY98Va9XW_gasFsHWEUfp_rwtvrZRVqC/view?usp=drive_link' }
-                ]
-            },
-            {
-                id: '07',
-                name: 'Cianorte',
-                color: COLORS.teal,
-                email: 'nrecne_formadores@escola.pr.gov.br',
-                phone: '(44) 3619-8126 / 3619-8118',
-                tutores: [
-                    { id: 'cne_1', name: 'Clarice', role: 'Tutora de Formação', driveUrl: 'https://drive.google.com/file/d/1desmaFcvLFqFU4XTBPDd_6JVJ1IL4Iko/view?usp=drive_link' }
-                ]
-            },
-            {
-                id: '08',
-                name: 'Cornélio Procópio',
-                color: COLORS.green,
-                email: 'nrecpp_formadores@escola.pr.gov.br',
-                phone: '(43) 3520-5116',
-                tutores: [
-                    { id: 'cpp_1', name: 'Arthur', role: 'Tutor de Formação', driveUrl: 'https://drive.google.com/file/d/1gbIHaJQLWO3cT_f_sNoP1jYDyK9zUF0-/view?usp=drive_link' },
-                    { id: 'cpp_2', name: 'Carolinne', role: 'Tutora de Formação', driveUrl: 'https://drive.google.com/file/d/1sXh3YUo80WQsglf7GTcYIvwJx1kPZTRD/view?usp=sharing' }
-                ]
-            },
-            {
-                id: '09',
-                name: 'Curitiba',
-                color: COLORS.blue,
-                email: 'nrecta_formadores@escola.pr.gov.br',
-                phone: '(41) 3326-2451',
-                tutores: [
-                    { id: 'cta_1', name: 'Lucas', role: 'Tutor de Formação', driveUrl: 'https://drive.google.com/file/d/1k9EuEZvQ1_UCajNB_pfr6kwer9khoFWH/view?usp=sharing' },
-                    { id: 'cta_2', name: 'Alexsandro', role: 'Tutor de Formação', driveUrl: 'https://drive.google.com/file/d/1z8795jXlvA_l9-h5_qkcaJxfwUrdKSF-/view?usp=drive_link' },
-                    { id: 'cta_3', name: 'Mauro Martins Cardoso', role: 'Tutor de Formação', driveUrl: 'https://drive.google.com/file/d/1Bj206rMUMWgk9qGIV0Q4OkNTQX7Yobey/view?usp=sharing' },
-                    { id: 'cta_4', name: 'Sonia', role: 'Tutora de Formação', driveUrl: 'https://drive.google.com/file/d/10rsD10s_w-CHHmL93Z-P_ltbWn_jQEh0/view?usp=drive_link' },
-                    { id: 'cta_5', name: 'Marcia Galvan', role: 'Tutora de Formação', driveUrl: 'https://drive.google.com/file/d/1WI1Amlh1QKPeq-SOZ1DYMAOGfX-W_Ytw/view?usp=sharing' }
-                ]
-            },
-            {
-                id: '10',
-                name: 'Dois Vizinhos',
-                color: COLORS.amber,
-                email: 'nredvz_formadores@escola.pr.gov.br',
-                phone: '(46) 3581-5105',
-                tutores: [
-                    { id: 'dvz_1', name: 'Diovani', role: 'Tutor de Formação', driveUrl: 'https://drive.google.com/file/d/1mRV1ZeVoBFgZXBcarNZfhfuX4IypqM8n/view?usp=sharing' }
-                ]
-            },
-            {
-                id: '11',
-                name: 'Foz do Iguaçu',
-                color: COLORS.amber,
-                email: 'nrefoz_formadores@escola.pr.gov.br',
-                phone: '(45) 3520-4031',
-                tutores: [
-                    { id: 'foz_1', name: 'Ronalde', role: 'Tutor de Formação', driveUrl: 'https://drive.google.com/file/d/1NJIbo5pOovAk5Orrsh3yvo4T0v1atr9H/view?usp=drive_link' },
-                    { id: 'foz_2', name: 'Rosane', role: 'Tutora de Formação', driveUrl: 'https://drive.google.com/file/d/1yOisMyWIniTinfUgDVg_ca5aUE_0bjK5/view?usp=drive_link' }
-                ]
-            },
-            {
-                id: '12',
-                name: 'Francisco Beltrão',
-                color: COLORS.amber,
-                email: 'nrefnb_formadores@escola.pr.gov.br',
-                phone: '(46) 3520-4937',
-                tutores: [
-                    { id: 'fnb_1', name: 'Cristianela', role: 'Tutora de Formação', driveUrl: 'https://drive.google.com/file/d/1uJVZFR9lrPUMvjMldw7WuQJsqlxwKrr_/view?usp=drive_link' },
-                    { id: 'fnb_2', name: 'Rosane', role: 'Tutora de Formação', driveUrl: 'https://drive.google.com/file/d/1n7Lnpc-sQB3uhi-qzzTPtMzjLJvoWrED/view?usp=drive_link' }
-                ]
-            },
-            {
-                id: '13',
-                name: 'Goioerê',
-                color: COLORS.teal,
-                email: 'nregre_formadores@escola.pr.gov.br',
-                phone: '(44) 3521-8686 (Nova Sede)',
-                tutores: [
-                    { id: 'gre_1', name: 'Rodrigo', role: 'Tutor de Formação', driveUrl: 'https://drive.google.com/file/d/1vvVB9UZFlit8i5swxCt5x-GrPUEFNwpq/view?usp=drive_link' }
-                ]
-            },
-            {
-                id: '14',
-                name: 'Guarapuava',
-                color: COLORS.purple,
-                email: 'nregrp_formadores@escola.pr.gov.br',
-                phone: '(42) 3621-7640',
-                tutores: [
-                    { id: 'grp_1', name: 'Marion', role: 'Tutora de Formação', driveUrl: 'https://drive.google.com/file/d/1tUmDzYrneUf_76Ons1SaWOGYZSF_rxYg/view?usp=drive_link' },
-                    { id: 'grp_2', name: 'João Antônio', role: 'Tutor de Formação', driveUrl: 'https://drive.google.com/file/d/1Jv0_4rrkBoxoWEMblqa4Sh7CtaFAKtwF/view?usp=drive_link' },
-                    { id: 'grp_3', name: 'Nubiane', role: 'Tutora de Formação', driveUrl: 'https://drive.google.com/file/d/1VLrnlorD01c4NmqPOEoUu2mPI7NM83C9/view?usp=drive_link' }
-                ]
-            },
-            {
-                id: '15',
-                name: 'Ibaiti',
-                color: COLORS.green,
-                email: 'nreibt_formadores@escola.pr.gov.br',
-                phone: '(43) 3546-8132',
-                tutores: [
-                    { id: 'ibt_1', name: 'Erika', role: 'Tutora de Formação', driveUrl: 'https://drive.google.com/file/d/1y_uD4Yn0a4d9JCaOCoKPeL_ROCl4evpB/view?usp=drive_link' },
-                    { id: 'ibt_2', name: 'Julio', role: 'Tutor de Formação', driveUrl: 'https://drive.google.com/file/d/1AUpODpp2OTQtHiy8rasJDotzUiBPXWCt/view?usp=drive_link' }
-                ]
-            },
-            {
-                id: '16',
-                name: 'Irati',
-                color: COLORS.purple,
-                email: 'nreiri_formadores@escola.pr.gov.br',
-                phone: '(42) 3421-2262',
-                tutores: [
-                    { id: 'iri_1', name: 'Carla', role: 'Tutora de Formação', driveUrl: 'https://drive.google.com/file/d/1rrggOcgoPQLHHE1s_y9xuuOsqUDJLRqJ/view?usp=drive_link' },
-                    { id: 'iri_2', name: 'Ana', role: 'Tutora de Formação', driveUrl: 'https://drive.google.com/file/d/1BkP_PtllXSjjla5eh0Dc0Oh5oNexLN1U/view?usp=drive_link' }
-                ]
-            },
-            {
-                id: '17',
-                name: 'Ivaiporã',
-                color: COLORS.purple,
-                email: 'nreivp_formadoresadm@escola.pr.gov.br',
-                phone: '(43) 3472-5728',
-                tutores: [
-                    { id: 'ivp_1', name: 'Maristela', role: 'Tutora de Formação', driveUrl: 'https://drive.google.com/file/d/1FuwUVpnB994WcZ5r4QhzMwElfwoqILup/view?usp=drive_link' },
-                    { id: 'ivp_2', name: 'Gisele', role: 'Tutora de Formação', driveUrl: 'https://drive.google.com/file/d/1QXS0jEdBkvfiIELlaU6_JZk1DeZf0N11/view?usp=drive_link' }
-                ]
-            },
-            {
-                id: '18',
-                name: 'Jacarezinho',
-                color: COLORS.green,
-                email: 'nrejzo_formadores@escola.pr.gov.br',
-                phone: '(43) 3511-4200',
-                tutores: [
-                    { id: 'jzo_1', name: 'Vanessa', role: 'Tutora de Formação', driveUrl: 'https://drive.google.com/file/d/1WU4LuUI-yN6Lohi84_lMjk6xyxLqIUhy/view?usp=drive_link' },
-                    { id: 'jzo_2', name: 'Luís', role: 'Tutor de Formação', driveUrl: 'https://drive.google.com/file/d/1E8roFGXeOC8C3uXFhLsMiDRUQ-ucHuRd/view?usp=drive_link' }
-                ]
-            },
-            {
-                id: '19',
-                name: 'Laranjeiras do Sul',
-                color: COLORS.purple,
-                email: 'nrelds_formadores@escola.pr.gov.br',
-                phone: '(42) 3635-8923',
-                tutores: [
-                    { id: 'lds_1', name: 'Josiele', role: 'Tutora de Formação', driveUrl: 'https://drive.google.com/file/d/1yIIRsJJTSbNQTLEO859YUSFwO3x7jxMW/view?usp=drive_link' },
-                    { id: 'lds_2', name: 'Marcos', role: 'Tutor de Formação', driveUrl: 'https://drive.google.com/file/d/1YxBWRo_oK85nxzhwqA5ihp3GIVlz5PDm/view?usp=drive_link' }
-                ]
-            },
-            {
-                id: '20',
-                name: 'Loanda',
-                color: COLORS.teal,
-                email: 'nreloa_formadores@escola.pr.gov.br',
-                phone: '(44) 3248-1400',
-                tutores: [
-                    { id: 'loa_1', name: 'Silvia', role: 'Tutora de Formação', driveUrl: 'https://drive.google.com/file/d/1C-ILvpxizqQ784zFBw_HR7c04bGIXFLI/view?usp=drive_link' }
-                ]
-            },
-            {
-                id: '21',
-                name: 'Londrina',
-                color: COLORS.green,
-                email: 'nrelda_formadores@escola.pr.gov.br',
-                phone: '(43) 3371-1324',
-                tutores: [
-                    { id: 'lda_1', name: 'Deise', role: 'Tutora de Formação', driveUrl: 'https://drive.google.com/file/d/1NebkVsN4_l1FCTRQjAEWuETuSqvKdsHI/view?usp=drive_link' },
-                    { id: 'lda_2', name: 'Giseli', role: 'Tutora de Formação', driveUrl: 'https://drive.google.com/file/d/1jC5YAokTJkYytar6m4S7O732zlNDu00l/view?usp=drive_link' },
-                    { id: 'lda_3', name: 'Sheyla', role: 'Tutora de Formação', driveUrl: 'https://drive.google.com/file/d/1mXxbEwgroL_V4JK2G836RT2sPJqrlbvf/view?usp=drive_link' }
-                ]
-            },
-            {
-                id: '22',
-                name: 'Maringá',
-                color: COLORS.teal,
-                email: 'nremga_formadores@escola.pr.gov.br',
-                phone: '(44) 3218-7123',
-                tutores: [
-                    { id: 'mga_1', name: 'Gustavo', role: 'Tutor de Formação', driveUrl: 'https://drive.google.com/file/d/1Z0BJxLj2wTZs_M0cZHnt8_fZFZ_fZhoc/view?usp=drive_link' },
-                    { id: 'mga_2', name: 'Silvia', role: 'Tutora de Formação', driveUrl: 'https://drive.google.com/file/d/1yyCDwLvS7B1tsIR5veYx64i0q_MYbLlT/view?usp=drive_link' },
-                    { id: 'mga_3', name: 'Daniel', role: 'Tutor de Formação', driveUrl: 'https://drive.google.com/file/d/1Lcoeg05op7JUwU3P3I8fXcxRZZgtDpXP/view?usp=drive_link' }
-                ]
-            },
-            {
-                id: '23',
-                name: 'Paranaguá',
-                color: COLORS.blue,
-                email: 'nrepga_formadores@escola.pr.gov.br',
-                phone: '(41) 3420-7210',
-                tutores: [
-                    { id: 'pga_1', name: 'Lorena', role: 'Tutora de Formação', driveUrl: 'https://drive.google.com/file/d/197BK91n4en1bFSrto8ilnk7SZQfZodsQ/view?usp=drive_link' },
-                    { id: 'pga_2', name: 'Magali', role: 'Tutora de Formação', driveUrl: 'https://drive.google.com/file/d/1xCBBp-Zvnf5Y4KTuE2E6Nj91VL8W0AJ7/view?usp=drive_link' }
-                ]
-            },
-            {
-                id: '24',
-                name: 'Paranavaí',
-                color: COLORS.teal,
-                email: 'nrepva_formadores@escola.pr.gov.br',
-                phone: '(44) 3421-1963',
-                tutores: [
-                    { id: 'pva_1', name: 'Marcela', role: 'Tutora de Formação', driveUrl: 'https://drive.google.com/file/d/1J7I4378u1S1NFbKHH5jzQfUM0y1hqtRK/view?usp=drive_link' },
-                    { id: 'pva_2', name: 'Polyanna', role: 'Tutora de Formação', driveUrl: 'https://drive.google.com/file/d/18cZST1dyVbxqK1-s5DZbxyrqPl7zR7ji/view?usp=drive_link' }
-                ]
-            },
-            {
-                id: '25',
-                name: 'Pato Branco',
-                color: COLORS.amber,
-                email: 'nrepbc_formadores@escola.pr.gov.br',
-                phone: '(46) 3220-5369',
-                tutores: [
-                    { id: 'pbc_1', name: 'Marisete', role: 'Tutora de Formação', driveUrl: 'https://drive.google.com/file/d/1AAB0OMH62mFn3STF7uZIE9i6nB-p_WNW/view?usp=drive_link' },
-                    { id: 'pbc_2', name: 'Leticia', role: 'Tutora de Formação', driveUrl: 'https://drive.google.com/file/d/1mHXr8ZWsqIkosH_4Xup4K8SA8deXbF2j/view?usp=drive_link' }
-                ]
-            },
-            {
-                id: '26',
-                name: 'Pitanga',
-                color: COLORS.purple,
-                email: 'nrepig_formadores1@escola.pr.gov.br',
-                phone: '(42) 3646-8349',
-                tutores: [
-                    { id: 'pig_1', name: 'Liara', role: 'Tutora de Formação', driveUrl: 'https://drive.google.com/file/d/1CK2uWtaixwqZ-mrDtGDjEfR5po4_Rxw1/view?usp=drive_link' },
-                    { id: 'pig_2', name: 'Junior', role: 'Tutor de Formação', driveUrl: 'https://drive.google.com/file/d/1sv8QP7Ccw8BFb6Oozew80hqi2DLCb2TU/view?usp=drive_link' }
-                ]
-            },
-            {
-                id: '27',
-                name: 'Ponta Grossa',
-                color: COLORS.purple,
-                email: 'nrepgo_formadores@escola.pr.gov.br',
-                phone: '(42) 3219-5420',
-                tutores: [
-                    { id: 'pgo_1', name: 'Marcelo', role: 'Tutor de Formação', driveUrl: 'https://drive.google.com/file/d/1p6IbfKZlJ9sFR9I3xp_9KWYMNoceQM3G/view?usp=drive_link' },
-                    { id: 'pgo_2', name: 'Ingrid', role: 'Tutora de Formação', driveUrl: 'https://drive.google.com/file/d/1lfZnvG5VNCbjGtpTo0Ka2rLvKsl8dp4r/view?usp=drive_link' },
-                    { id: 'pgo_3', name: 'Fabia', role: 'Tutora de Formação', driveUrl: 'https://drive.google.com/file/d/1k0iYptaT5-PRx8De4FTzhoAgcb9M71OJ/view?usp=sharing' },
-                    { id: 'pgo_4', name: 'Bruna', role: 'Tutora de Formação', driveUrl: 'https://drive.google.com/file/d/1yUVuFYppDksSsCUI1eMmHKFDaMhkBIfX/view?usp=drive_link' }
-                ]
-            },
-            {
-                id: '28',
-                name: 'Telêmaco Borba',
-                color: COLORS.purple,
-                email: 'nreteb_formadores@escola.pr.gov.br',
-                phone: '(42) 3271-3739',
-                tutores: [
-                    { id: 'teb_1', name: 'Jucilei', role: 'Tutora de Formação', driveUrl: 'https://drive.google.com/file/d/1jT2PQdVm6RbCpxiWZy2qT-l23oWPMz10/view?usp=drive_link' },
-                    { id: 'teb_2', name: 'Mayara', role: 'Tutora de Formação', driveUrl: 'https://drive.google.com/file/d/1lngoV3rzTZBDVPeOS7QjPe94Az1aoYm1/view?usp=drive_link' }
-                ]
-            },
-            {
-                id: '29',
-                name: 'Toledo',
-                color: COLORS.amber,
-                email: 'nretoo_formadores@escola.pr.gov.br',
-                phone: '(45) 3379-7200 ramal 7232',
-                tutores: [
-                    { id: 'too_1', name: 'Tamara', role: 'Tutora de Formação', driveUrl: 'https://drive.google.com/file/d/1Rckkt6omgTcdPGMV0iku_97gk4q7mlVV/view?usp=drive_link' },
-                    { id: 'too_2', name: 'Gisele', role: 'Tutora de Formação', driveUrl: 'https://drive.google.com/file/d/1UZgkQ0PD4h3OuoQie2FPyXqBnNUZlATh/view?usp=drive_link' },
-                    { id: 'too_3', name: 'Tania', role: 'Tutora de Formação', driveUrl: 'https://drive.google.com/file/d/1cQj-4f1zj4KNjsz_ZNhzLsXEpsZFC6_Q/view?usp=drive_link' }
-                ]
-            },
-            {
-                id: '30',
-                name: 'Umuarama',
-                color: COLORS.teal,
-                email: 'nreumr_formadores@escola.pr.gov.br',
-                phone: '(44) 3621-8800',
-                tutores: [
-                    { id: 'umr_1', name: 'Cristina', role: 'Tutora de Formação', driveUrl: 'https://drive.google.com/file/d/1e2VTnba9IoEH5al0mck1SuyPaZdTABaU/view?usp=drive_link' },
-                    { id: 'umr_2', name: 'Suzi', role: 'Tutora de Formação', driveUrl: 'https://drive.google.com/file/d/1SkaJ_9S0lo6MuzjvjaTk5fgznMl-49nm/view?usp=drive_link' }
-                ]
-            },
-            {
-                id: '31',
-                name: 'União da Vitória',
-                color: COLORS.blue,
-                email: 'nreuva_formadores@escola.pr.gov.br',
-                phone: '(42) 3521-1854',
-                tutores: [
-                    { id: 'uva_1', name: 'Solange', role: 'Tutora de Formação', driveUrl: 'https://drive.google.com/file/d/11cweHld1OWjI1RaELP7Ye15L2E7v5ojj/view?usp=sharing' }
-                ]
-            },
-            {
-                id: '32',
-                name: 'Wenceslau Braz',
-                color: COLORS.green,
-                email: 'nrewbz_formadores@escola.pr.gov.br',
-                phone: '(43) 3513-1144',
-                tutores: [
-                    { id: 'wbz_1', name: 'Milaine', role: 'Tutora de Formação', driveUrl: 'https://drive.google.com/file/d/1k67fmQ1M6jEjHcPpxaMlOE7UDne5pGPY/view?usp=drive_link' }
-                ]
-            }
-        ];
 
         const normalizePhotoUrl = (url) => {
             if (!url) return '';
             const match = url.match(/\/d\/([a-zA-Z0-9_-]+)/) || url.match(/id=([a-zA-Z0-9_-]+)/);
             if (match && match[1]) {
-                return `https://lh3.googleusercontent.com/d/${match[1]}=s260`;
+                return `https://lh3.googleusercontent.com/d/${match[1]}`;
             }
             return url;
         };
 
-        const SafeImage = ({ src, alt, className = '', style = {}, fallbackName = '?' }) => {
+        const SafeImage = ({ src, alt, className = '', fallbackName = '?' }) => {
             const [imgSrc, setImgSrc] = useState(normalizePhotoUrl(src));
             const [hasError, setHasError] = useState(false);
 
@@ -444,7 +77,7 @@
             if (hasError || !src) {
                 const initial = fallbackName.trim().charAt(0).toUpperCase();
                 return (
-                    <div className={`w-full h-full flex items-center justify-center bg-slate-100 text-slate-700 font-black select-none ${className}`}>
+                    <div className={`w-full h-full flex items-center justify-center bg-gradient-to-tr from-slate-200 to-slate-100 text-slate-600 font-black select-none ${className}`}>
                         <span className="text-lg md:text-xl">{initial}</span>
                     </div>
                 );
@@ -455,152 +88,664 @@
                     src={imgSrc} 
                     alt={alt} 
                     className={className} 
-                    style={style} 
-                    referrerPolicy="no-referrer"
                     onError={handleError} 
                 />
             );
         };
 
-        const Modal = ({ item, color, stats = {}, onClose, onOpenCarinhoForTutor }) => {
-            if (!item) return null;
-            const isNre = !item.driveUrl && item.tutores;
-            const displayName = isNre ? `NRE ${item.name}` : item.name;
-            const role = isNre ? `${item.tutores.length} Tutores de Formação` : item.role;
-            const email = item.email || item.nreInfo?.email;
-            const phone = item.phone || item.nreInfo?.phone;
+        // Dados dos 32 NREs e Tutores Oficiais
+        const nresData = [
+            {
+                id: 'nre_apucarana',
+                name: 'NRE Apucarana',
+                email: 'nreapu_formadores@escola.pr.gov.br',
+                phone: '(43) 3420 1633',
+                color: COLORS.seedGreen,
+                tutores: [
+                    { id: 'apu_andreia', name: 'Andréia', role: 'Tutora de Formação', photoUrl: 'https://drive.google.com/file/d/1bx_RQDQgFrja8ThXH-3LMp99Wb-PZB-6/view?usp=drive_link' },
+                    { id: 'apu_nubia', name: 'Nubia', role: 'Tutora de Formação', photoUrl: 'https://drive.google.com/file/d/1HhyhxsaC5IX6dAl_rdAKhL4WzHF3Q-Vj/view?usp=drive_link' },
+                    { id: 'apu_claudia', name: 'Cláudia', role: 'Tutora de Formação', photoUrl: 'https://drive.google.com/file/d/1h0Q0yTQLal9ikDOvQuydSnnbHo8J3fED/view?usp=drive_link' }
+                ]
+            },
+            {
+                id: 'nre_am_norte',
+                name: 'NRE Área Metropolitana Norte',
+                email: 'nreamn_formadores@escola.pr.gov.br',
+                phone: '(41) 3251-6583',
+                color: COLORS.paranaBlue,
+                tutores: [
+                    { id: 'amn_luana', name: 'Luana', role: 'Tutora de Formação', photoUrl: 'https://drive.google.com/file/d/1lo308nevFij0QJfgcjO4DB8_Zc13vBx1/view?usp=drive_link' },
+                    { id: 'amn_valeria', name: 'Valeria', role: 'Tutora de Formação', photoUrl: 'https://drive.google.com/file/d/1RG8zMlzjnDo-_J5jNoGHc5StCm-NVUoV/view?usp=drive_link' },
+                    { id: 'amn_francis', name: 'Francis', role: 'Tutora de Formação', photoUrl: 'https://drive.google.com/file/d/1N6gmvMcdjXovw91hCe6WSXZ73-0DUmsZ/view?usp=drive_link' }
+                ]
+            },
+            {
+                id: 'nre_am_sul',
+                name: 'NRE Área Metropolitana Sul',
+                email: 'nreams_formadores@escola.pr.gov.br',
+                phone: '(41) 3277-7595 ramal 7595',
+                color: COLORS.paranaBlue,
+                tutores: [
+                    { id: 'ams_ulisses', name: 'Ulisses', role: 'Tutor de Formação', photoUrl: 'https://drive.google.com/file/d/1taxZC62jpEm7_uansRsCAsQq9XHpkar0/view?usp=sharing' },
+                    { id: 'ams_luciana', name: 'Luciana', role: 'Tutora de Formação', photoUrl: 'https://drive.google.com/file/d/1_81cJBXk5TB4o9S1ssxts2VU55oAQxT6/view?usp=drive_link' }
+                ]
+            },
+            {
+                id: 'nre_assis',
+                name: 'NRE Assis Chateaubriand',
+                email: 'nreasd_formadores@escola.pr.gov.br',
+                phone: '(44) 3528-8337',
+                color: COLORS.seedGreen,
+                tutores: [
+                    { id: 'asd_silvana', name: 'Silvana', role: 'Tutora de Formação', photoUrl: 'https://drive.google.com/file/d/1vAdEf56uVrtW4faD9ZAx8k9thFXmvYoB/view?usp=sharing' },
+                    { id: 'asd_sonia', name: 'Sonia', role: 'Tutora de Formação', photoUrl: 'https://drive.google.com/file/d/1Gc_a9XAF9M3jWu-PZ-MXqSyu8w2OAfWN/view?usp=drive_link' }
+                ]
+            },
+            {
+                id: 'nre_campo_mourao',
+                name: 'NRE Campo Mourão',
+                email: 'nrecpm_formadores@escola.pr.gov.br',
+                phone: '(44) 3518-2802 / (44) 3518-2807',
+                color: COLORS.amber,
+                tutores: [
+                    { id: 'cpm_marinalva', name: 'Marinalva', role: 'Tutora de Formação', photoUrl: 'https://drive.google.com/file/d/1y3uoGgqnwtIs1PiadIbxuDejLSUY-ynu/view?usp=sharing' },
+                    { id: 'cpm_patricia', name: 'Patricia', role: 'Tutora de Formação', photoUrl: 'https://drive.google.com/file/d/1gojXt5BYPkEr4gI6pDS2O8948R1GwU4F/view?usp=drive_link' }
+                ]
+            },
+            {
+                id: 'nre_cascavel',
+                name: 'NRE Cascavel',
+                email: 'nrecsc_formadores@escola.pr.gov.br',
+                phone: '(45) 3333 2830',
+                color: COLORS.seedGreen,
+                tutores: [
+                    { id: 'csc_aline', name: 'Aline', role: 'Tutora de Formação', photoUrl: 'https://drive.google.com/file/d/10i7NnLVa554qM2lkYsuc_h07E0d-sOBW/view?usp=drive_link' },
+                    { id: 'csc_luciana', name: 'Luciana', role: 'Tutora de Formação', photoUrl: 'https://drive.google.com/file/d/1kY98Va9XW_gasFsHWEUfp_rwtvrZRVqC/view?usp=drive_link' }
+                ]
+            },
+            {
+                id: 'nre_cianorte',
+                name: 'NRE Cianorte',
+                email: 'nrecne_formadores@escola.pr.gov.br',
+                phone: '(44) 3619-8126 / (44) 3619-8118',
+                color: COLORS.amber,
+                tutores: [
+                    { id: 'cne_clarice', name: 'Clarice', role: 'Tutora de Formação', photoUrl: 'https://drive.google.com/file/d/1desmaFcvLFqFU4XTBPDd_6JVJ1IL4Iko/view?usp=drive_link' }
+                ]
+            },
+            {
+                id: 'nre_cornelio',
+                name: 'NRE Cornélio Procópio',
+                email: 'nrecpp_formadores@escola.pr.gov.br',
+                phone: '(43) 3520-5116',
+                color: COLORS.seedGreen,
+                tutores: [
+                    { id: 'cpp_arthur', name: 'Arthur', role: 'Tutor de Formação', photoUrl: 'https://drive.google.com/file/d/1gbIHaJQLWO3cT_f_sNoP1jYDyK9zUF0-/view?usp=drive_link' },
+                    { id: 'cpp_carolinne', name: 'Carolinne', role: 'Tutora de Formação', photoUrl: 'https://drive.google.com/file/d/1sXh3YUo80WQsglf7GTcYIvwJx1kPZTRD/view?usp=sharing' }
+                ]
+            },
+            {
+                id: 'nre_curitiba',
+                name: 'NRE Curitiba',
+                email: 'nrecta_formadores@escola.pr.gov.br',
+                phone: '(41) 3326-2451',
+                color: COLORS.paranaBlue,
+                tutores: [
+                    { id: 'cta_lucas', name: 'Lucas', role: 'Tutor de Formação', photoUrl: 'https://drive.google.com/file/d/1k9EuEZvQ1_UCajNB_pfr6kwer9khoFWH/view?usp=sharing' },
+                    { id: 'cta_alexsandro', name: 'Alexsandro', role: 'Tutor de Formação', photoUrl: 'https://drive.google.com/file/d/1z8795jXlvA_l9-h5_qkcaJxfwUrdKSF-/view?usp=drive_link' },
+                    { id: 'cta_mauro', name: 'Mauro Martins Cardoso', role: 'Tutor de Formação', photoUrl: 'https://drive.google.com/file/d/1Bj206rMUMWgk9qGIV0Q4OkNTQX7Yobey/view?usp=sharing' },
+                    { id: 'cta_sonia', name: 'Sonia', role: 'Tutora de Formação', photoUrl: 'https://drive.google.com/file/d/10rsD10s_w-CHHmL93Z-P_ltbWn_jQEh0/view?usp=drive_link' },
+                    { id: 'cta_marcia', name: 'Marcia Galvan', role: 'Tutora de Formação', photoUrl: 'https://drive.google.com/file/d/1WI1Amlh1QKPeq-SOZ1DYMAOGfX-W_Ytw/view?usp=sharing' }
+                ]
+            },
+            {
+                id: 'nre_dois_vizinhos',
+                name: 'NRE Dois Vizinhos',
+                email: 'nredvz_formadores@escola.pr.gov.br',
+                phone: '(46) 3581-5105',
+                color: COLORS.seedGreen,
+                tutores: [
+                    { id: 'dvz_diovani', name: 'Diovani', role: 'Tutor de Formação', photoUrl: 'https://drive.google.com/file/d/1mRV1ZeVoBFgZXBcarNZfhfuX4IypqM8n/view?usp=sharing' }
+                ]
+            },
+            {
+                id: 'nre_foz',
+                name: 'NRE Foz do Iguaçu',
+                email: 'nrefoz_formadores@escola.pr.gov.br',
+                phone: '(45) 3520-4031',
+                color: COLORS.seedGreen,
+                tutores: [
+                    { id: 'foz_ronalde', name: 'Ronalde', role: 'Tutor de Formação', photoUrl: 'https://drive.google.com/file/d/1NJIbo5pOovAk5Orrsh3yvo4T0v1atr9H/view?usp=drive_link' },
+                    { id: 'foz_rosane', name: 'Rosane', role: 'Tutora de Formação', photoUrl: 'https://drive.google.com/file/d/1yOisMyWIniTinfUgDVg_ca5aUE_0bjK5/view?usp=drive_link' }
+                ]
+            },
+            {
+                id: 'nre_beltrao',
+                name: 'NRE Francisco Beltrão',
+                email: 'nrefnb_formadores@escola.pr.gov.br',
+                phone: '(46) 3520-4937',
+                color: COLORS.seedGreen,
+                tutores: [
+                    { id: 'fnb_cristianela', name: 'Cristianela', role: 'Tutora de Formação', photoUrl: 'https://drive.google.com/file/d/1uJVZFR9lrPUMvjMldw7WuQJsqlxwKrr_/view?usp=drive_link' },
+                    { id: 'fnb_rosane', name: 'Rosane', role: 'Tutora de Formação', photoUrl: 'https://drive.google.com/file/d/1n7Lnpc-sQB3uhi-qzzTPtMzjLJvoWrED/view?usp=drive_link' }
+                ]
+            },
+            {
+                id: 'nre_goioere',
+                name: 'NRE Goioerê',
+                email: 'nregre_formadores@escola.pr.gov.br',
+                phone: '(44) 3521-8686',
+                color: COLORS.amber,
+                tutores: [
+                    { id: 'gre_rodrigo', name: 'Rodrigo', role: 'Tutor de Formação', photoUrl: 'https://drive.google.com/file/d/1vvVB9UZFlit8i5swxCt5x-GrPUEFNwpq/view?usp=drive_link' }
+                ]
+            },
+            {
+                id: 'nre_guarapuava',
+                name: 'NRE Guarapuava',
+                email: 'nregrp_formadores@escola.pr.gov.br',
+                phone: '(42) 3621-7640',
+                color: COLORS.paranaBlue,
+                tutores: [
+                    { id: 'grp_marion', name: 'Marion', role: 'Tutora de Formação', photoUrl: 'https://drive.google.com/file/d/1tUmDzYrneUf_76Ons1SaWOGYZSF_rxYg/view?usp=drive_link' },
+                    { id: 'grp_joao', name: 'João Antônio', role: 'Tutor de Formação', photoUrl: 'https://drive.google.com/file/d/1Jv0_4rrkBoxoWEMblqa4Sh7CtaFAKtwF/view?usp=drive_link' },
+                    { id: 'grp_nubiane', name: 'Nubiane', role: 'Tutora de Formação', photoUrl: 'https://drive.google.com/file/d/1VLrnlorD01c4NmqPOEoUu2mPI7NM83C9/view?usp=drive_link' }
+                ]
+            },
+            {
+                id: 'nre_ibaiti',
+                name: 'NRE Ibaiti',
+                email: 'nreibt_formadores@escola.pr.gov.br',
+                phone: '(43) 3546-8132',
+                color: COLORS.seedGreen,
+                tutores: [
+                    { id: 'ibt_erika', name: 'Erika', role: 'Tutora de Formação', photoUrl: 'https://drive.google.com/file/d/1y_uD4Yn0a4d9JCaOCoKPeL_ROCl4evpB/view?usp=drive_link' },
+                    { id: 'ibt_julio', name: 'Julio', role: 'Tutor de Formação', photoUrl: 'https://drive.google.com/file/d/1AUpODpp2OTQtHiy8rasJDotzUiBPXWCt/view?usp=drive_link' }
+                ]
+            },
+            {
+                id: 'nre_irati',
+                name: 'NRE Irati',
+                email: 'nreiri_formadores@escola.pr.gov.br',
+                phone: '(42) 3421-2262',
+                color: COLORS.paranaBlue,
+                tutores: [
+                    { id: 'iri_carla', name: 'Carla', role: 'Tutora de Formação', photoUrl: 'https://drive.google.com/file/d/1rrggOcgoPQLHHE1s_y9xuuOsqUDJLRqJ/view?usp=drive_link' },
+                    { id: 'iri_ana', name: 'Ana', role: 'Tutora de Formação', photoUrl: 'https://drive.google.com/file/d/1BkP_PtllXSjjla5eh0Dc0Oh5oNexLN1U/view?usp=drive_link' }
+                ]
+            },
+            {
+                id: 'nre_ivaipora',
+                name: 'NRE Ivaiporã',
+                email: 'nreivp_formadoresadm@escola.pr.gov.br',
+                phone: '(43) 3472-5728',
+                color: COLORS.amber,
+                tutores: [
+                    { id: 'ivp_maristela', name: 'Maristela', role: 'Tutora de Formação', photoUrl: 'https://drive.google.com/file/d/1FuwUVpnB994WcZ5r4QhzMwElfwoqILup/view?usp=drive_link' },
+                    { id: 'ivp_gisele', name: 'Gisele', role: 'Tutora de Formação', photoUrl: 'https://drive.google.com/file/d/1QXS0jEdBkvfiIELlaU6_JZk1DeZf0N11/view?usp=drive_link' }
+                ]
+            },
+            {
+                id: 'nre_jacarezinho',
+                name: 'NRE Jacarezinho',
+                email: 'nrejzo_formadores@escola.pr.gov.br',
+                phone: '(43) 3511-4200',
+                color: COLORS.seedGreen,
+                tutores: [
+                    { id: 'jzo_vanessa', name: 'Vanessa', role: 'Tutora de Formação', photoUrl: 'https://drive.google.com/file/d/1WU4LuUI-yN6Lohi84_lMjk6xyxLqIUhy/view?usp=drive_link' },
+                    { id: 'jzo_luis', name: 'Luís', role: 'Tutor de Formação', photoUrl: 'https://drive.google.com/file/d/1E8roFGXeOC8C3uXFhLsMiDRUQ-ucHuRd/view?usp=drive_link' }
+                ]
+            },
+            {
+                id: 'nre_laranjeiras',
+                name: 'NRE Laranjeiras do Sul',
+                email: 'nrelds_formadores@escola.pr.gov.br',
+                phone: '(42) 3635-8923',
+                color: COLORS.paranaBlue,
+                tutores: [
+                    { id: 'lds_josiele', name: 'Josiele', role: 'Tutora de Formação', photoUrl: 'https://drive.google.com/file/d/1yIIRsJJTSbNQTLEO859YUSFwO3x7jxMW/view?usp=drive_link' },
+                    { id: 'lds_marcos', name: 'Marcos', role: 'Tutor de Formação', photoUrl: 'https://drive.google.com/file/d/1YxBWRo_oK85nxzhwqA5ihp3GIVlz5PDm/view?usp=drive_link' }
+                ]
+            },
+            {
+                id: 'nre_loanda',
+                name: 'NRE Loanda',
+                email: 'nreloa_formadores@escola.pr.gov.br',
+                phone: '(44) 3248-1400',
+                color: COLORS.amber,
+                tutores: [
+                    { id: 'loa_silvia', name: 'Silvia', role: 'Tutora de Formação', photoUrl: 'https://drive.google.com/file/d/1C-ILvpxizqQ784zFBw_HR7c04bGIXFLI/view?usp=drive_link' }
+                ]
+            },
+            {
+                id: 'nre_londrina',
+                name: 'NRE Londrina',
+                email: 'nrelda_formadores@escola.pr.gov.br',
+                phone: '(43) 3371-1324',
+                color: COLORS.seedGreen,
+                tutores: [
+                    { id: 'lda_deise', name: 'Deise', role: 'Tutora de Formação', photoUrl: 'https://drive.google.com/file/d/1NebkVsN4_l1FCTRQjAEWuETuSqvKdsHI/view?usp=drive_link' },
+                    { id: 'lda_giseli', name: 'Giseli', role: 'Tutora de Formação', photoUrl: 'https://drive.google.com/file/d/1jC5YAokTJkYytar6m4S7O732zlNDu00l/view?usp=drive_link' },
+                    { id: 'lda_sheyla', name: 'Sheyla', role: 'Tutora de Formação', photoUrl: 'https://drive.google.com/file/d/1mXxbEwgroL_V4JK2G836RT2sPJqrlbvf/view?usp=drive_link' }
+                ]
+            },
+            {
+                id: 'nre_maringa',
+                name: 'NRE Maringá',
+                email: 'nremga_formadores@escola.pr.gov.br',
+                phone: '(44) 3218-7123',
+                color: COLORS.amber,
+                tutores: [
+                    { id: 'mga_gustavo', name: 'Gustavo', role: 'Tutor de Formação', photoUrl: 'https://drive.google.com/file/d/1Z0BJxLj2wTZs_M0cZHnt8_fZFZ_fZhoc/view?usp=drive_link' },
+                    { id: 'mga_silvia', name: 'Silvia', role: 'Tutora de Formação', photoUrl: 'https://drive.google.com/file/d/1yyCDwLvS7B1tsIR5veYx64i0q_MYbLlT/view?usp=drive_link' },
+                    { id: 'mga_daniel', name: 'Daniel', role: 'Tutor de Formação', photoUrl: 'https://drive.google.com/file/d/1Lcoeg05op7JUwU3P3I8fXcxRZZgtDpXP/view?usp=drive_link' }
+                ]
+            },
+            {
+                id: 'nre_paranagua',
+                name: 'NRE Paranaguá',
+                email: 'nrepga_formadores@escola.pr.gov.br',
+                phone: '(41) 3420-7210',
+                color: COLORS.paranaBlue,
+                tutores: [
+                    { id: 'pga_lorena', name: 'Lorena', role: 'Tutora de Formação', photoUrl: 'https://drive.google.com/file/d/197BK91n4en1bFSrto8ilnk7SZQfZodsQ/view?usp=drive_link' },
+                    { id: 'pga_magali', name: 'Magali', role: 'Tutora de Formação', photoUrl: 'https://drive.google.com/file/d/1xCBBp-Zvnf5Y4KTuE2E6Nj91VL8W0AJ7/view?usp=drive_link' }
+                ]
+            },
+            {
+                id: 'nre_paranavai',
+                name: 'NRE Paranavaí',
+                email: 'nrepva_formadores@escola.pr.gov.br',
+                phone: '(44) 3421-1963',
+                color: COLORS.amber,
+                tutores: [
+                    { id: 'pva_marcela', name: 'Marcela', role: 'Tutora de Formação', photoUrl: 'https://drive.google.com/file/d/1J7I4378u1S1NFbKHH5jzQfUM0y1hqtRK/view?usp=drive_link' },
+                    { id: 'pva_polyanna', name: 'Polyanna', role: 'Tutora de Formação', photoUrl: 'https://drive.google.com/file/d/18cZST1dyVbxqK1-s5DZbxyrqPl7zR7ji/view?usp=drive_link' }
+                ]
+            },
+            {
+                id: 'nre_pato_branco',
+                name: 'NRE Pato Branco',
+                email: 'nrepbc_formadores@escola.pr.gov.br',
+                phone: '(46) 3220-5369',
+                color: COLORS.seedGreen,
+                tutores: [
+                    { id: 'pbc_marisete', name: 'Marisete', role: 'Tutora de Formação', photoUrl: 'https://drive.google.com/file/d/1AAB0OMH62mFn3STF7uZIE9i6nB-p_WNW/view?usp=drive_link' },
+                    { id: 'pbc_leticia', name: 'Leticia', role: 'Tutora de Formação', photoUrl: 'https://drive.google.com/file/d/1mHXr8ZWsqIkosH_4Xup4K8SA8deXbF2j/view?usp=drive_link' }
+                ]
+            },
+            {
+                id: 'nre_pitanga',
+                name: 'NRE Pitanga',
+                email: 'nrepig_formadores1@escola.pr.gov.br',
+                phone: '(42) 3646-8349',
+                color: COLORS.amber,
+                tutores: [
+                    { id: 'pig_liara', name: 'Liara', role: 'Tutora de Formação', photoUrl: 'https://drive.google.com/file/d/1CK2uWtaixwqZ-mrDtGDjEfR5po4_Rxw1/view?usp=drive_link' },
+                    { id: 'pig_junior', name: 'Junior', role: 'Tutor de Formação', photoUrl: 'https://drive.google.com/file/d/1sv8QP7Ccw8BFb6Oozew80hqi2DLCb2TU/view?usp=drive_link' }
+                ]
+            },
+            {
+                id: 'nre_ponta_grossa',
+                name: 'NRE Ponta Grossa',
+                email: 'nrepgo_formadores@escola.pr.gov.br',
+                phone: '(42) 3219-5420',
+                color: COLORS.paranaBlue,
+                tutores: [
+                    { id: 'pgo_marcelo', name: 'Marcelo', role: 'Tutor de Formação', photoUrl: 'https://drive.google.com/file/d/1p6IbfKZlJ9sFR9I3xp_9KWYMNoceQM3G/view?usp=drive_link' },
+                    { id: 'pgo_ingrid', name: 'Ingrid', role: 'Tutora de Formação', photoUrl: 'https://drive.google.com/file/d/1lfZnvG5VNCbjGtpTo0Ka2rLvKsl8dp4r/view?usp=drive_link' },
+                    { id: 'pgo_fabia', name: 'Fabia', role: 'Tutora de Formação', photoUrl: 'https://drive.google.com/file/d/1k0iYptaT5-PRx8De4FTzhoAgcb9M71OJ/view?usp=sharing' },
+                    { id: 'pgo_bruna', name: 'Bruna', role: 'Tutora de Formação', photoUrl: 'https://drive.google.com/file/d/1yUVuFYppDksSsCUI1eMmHKFDaMhkBIfX/view?usp=drive_link' }
+                ]
+            },
+            {
+                id: 'nre_telemaco',
+                name: 'NRE Telêmaco Borba',
+                email: 'nreteb_formadores@escola.pr.gov.br',
+                phone: '(42) 3271-3739',
+                color: COLORS.amber,
+                tutores: [
+                    { id: 'teb_jucilei', name: 'Jucilei', role: 'Tutora de Formação', photoUrl: 'https://drive.google.com/file/d/1jT2PQdVm6RbCpxiWZy2qT-l23oWPMz10/view?usp=drive_link' },
+                    { id: 'teb_mayara', name: 'Mayara', role: 'Tutora de Formação', photoUrl: 'https://drive.google.com/file/d/1lngoV3rzTZBDVPeOS7QjPe94Az1aoYm1/view?usp=drive_link' }
+                ]
+            },
+            {
+                id: 'nre_toledo',
+                name: 'NRE Toledo',
+                email: 'nretoo_formadores@escola.pr.gov.br',
+                phone: '(45) 3379-7200 ramal 7232',
+                color: COLORS.seedGreen,
+                tutores: [
+                    { id: 'too_tamara', name: 'Tamara', role: 'Tutora de Formação', photoUrl: 'https://drive.google.com/file/d/1Rckkt6omgTcdPGMV0iku_97gk4q7mlVV/view?usp=drive_link' },
+                    { id: 'too_gisele', name: 'Gisele', role: 'Tutora de Formação', photoUrl: 'https://drive.google.com/file/d/1UZgkQ0PD4h3OuoQie2FPyXqBnNUZlATh/view?usp=drive_link' },
+                    { id: 'too_tania', name: 'Tania', role: 'Tutora de Formação', photoUrl: 'https://drive.google.com/file/d/1cQj-4f1zj4KNjsz_ZNhzLsXEpsZFC6_Q/view?usp=drive_link' }
+                ]
+            },
+            {
+                id: 'nre_umuarama',
+                name: 'NRE Umuarama',
+                email: 'nreumr_formadores@escola.pr.gov.br',
+                phone: '(44) 3621-8800',
+                color: COLORS.amber,
+                tutores: [
+                    { id: 'umr_cristina', name: 'Cristina', role: 'Tutora de Formação', photoUrl: 'https://drive.google.com/file/d/1e2VTnba9IoEH5al0mck1SuyPaZdTABaU/view?usp=drive_link' },
+                    { id: 'umr_suzi', name: 'Suzi', role: 'Tutora de Formação', photoUrl: 'https://drive.google.com/file/d/1SkaJ_9S0lo6MuzjvjaTk5fgznMl-49nm/view?usp=drive_link' }
+                ]
+            },
+            {
+                id: 'nre_uniao',
+                name: 'NRE União da Vitória',
+                email: 'nreuva_formadores@escola.pr.gov.br',
+                phone: '(42) 3521-1854',
+                color: COLORS.paranaBlue,
+                tutores: [
+                    { id: 'uva_solange', name: 'Solange', role: 'Tutora de Formação', photoUrl: 'https://drive.google.com/file/d/11cweHld1OWjI1RaELP7Ye15L2E7v5ojj/view?usp=sharing' }
+                ]
+            },
+            {
+                id: 'nre_wenceslau',
+                name: 'NRE Wenceslau Braz',
+                email: 'nrewbz_formadores@escola.pr.gov.br',
+                phone: '(43) 3513-1144',
+                color: COLORS.seedGreen,
+                tutores: [
+                    { id: 'wbz_milaine', name: 'Milaine', role: 'Tutora de Formação', photoUrl: 'https://drive.google.com/file/d/1k67fmQ1M6jEjHcPpxaMlOE7UDne5pGPY/view?usp=drive_link' }
+                ]
+            }
+        ];
 
-            const tutorStats = stats[item.id] || { smile: 0, handshake: 0, heart: 0 };
-            const totalCarinhos = (tutorStats.smile || 0) + (tutorStats.handshake || 0) + (tutorStats.heart || 0);
+        // Estado inicial de carinho/reconhecimento
+        const initialReactions = {
+            'apu_andreia': { smile: 6, partner: 4, heart: 12 },
+            'cta_lucas': { smile: 3, partner: 5, heart: 9 },
+            'cta_mauro': { smile: 4, partner: 2, heart: 8 }
+        };
 
-            const [activeTab, setActiveTab] = useState('info');
+        // Modal "Mande um carinho!"
+        const MandeCarinhoModal = ({ isOpen, onClose, nres, onSendCarinho, reactions }) => {
+            const [selectedNre, setSelectedNre] = useState(null);
+            const [search, setSearch] = useState('');
+
+            if (!isOpen) return null;
+
+            const handleClose = () => {
+                setSelectedNre(null);
+                setSearch('');
+                onClose();
+            };
+
+            // Filtragem de NREs ou Tutores
+            const filteredNres = nres.filter(n => {
+                const term = search.toLowerCase();
+                const matchesNre = n.name.toLowerCase().includes(term);
+                const matchesTutor = n.tutores.some(t => t.name.toLowerCase().includes(term));
+                return matchesNre || matchesTutor;
+            });
 
             return (
-                <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm no-print">
-                    <div className="bg-white rounded-[2.5rem] shadow-2xl w-full max-w-lg overflow-hidden relative flex flex-col max-h-[92vh]">
-                        <button 
-                            onClick={onClose} 
-                            className="absolute top-5 right-5 p-2 rounded-full bg-slate-100 text-slate-500 hover:bg-slate-200 transition-colors z-10"
-                        >
-                            <IconX />
-                        </button>
-                        <div className="h-24 w-full shrink-0" style={{ backgroundColor: color || COLORS.blue }}></div>
-                        
-                        <div className="px-6 sm:px-8 pb-8 flex flex-col items-center -mt-12 text-center overflow-y-auto">
-                            <div className="w-24 h-24 rounded-full border-4 border-white shadow-xl overflow-hidden bg-white mb-2 shrink-0">
-                                {isNre ? (
-                                    <div className="w-full h-full flex items-center justify-center bg-slate-50 text-slate-800 font-black text-2xl">
-                                        <IconBuilding />
-                                    </div>
-                                ) : (
-                                    <SafeImage 
-                                        src={item.driveUrl} 
-                                        alt={displayName} 
-                                        className="w-full h-full object-cover" 
-                                        fallbackName={displayName} 
-                                    />
-                                )}
-                            </div>
-                            <h2 className="text-xl sm:text-2xl font-black text-slate-900 uppercase tracking-tight">{displayName}</h2>
-                            <p className="text-xs font-black uppercase tracking-wider mt-0.5" style={{ color: color || COLORS.blue }}>
-                                {role} {item.nreName ? `• NRE ${item.nreName}` : ''}
-                            </p>
-
-                            {!isNre && (
-                                <div className="flex bg-slate-100 p-1 rounded-2xl w-full mt-4 gap-1">
-                                    <button 
-                                        onClick={() => setActiveTab('info')}
-                                        className={`flex-1 py-2 rounded-xl text-xs font-bold transition ${activeTab === 'info' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-900'}`}
-                                    >
-                                        Contatos e Atuação
-                                    </button>
-                                    <button 
-                                        onClick={() => setActiveTab('mural')}
-                                        className={`flex-1 py-2 rounded-xl text-xs font-bold transition flex items-center justify-center gap-1.5 ${activeTab === 'mural' ? 'bg-rose-500 text-white shadow-sm' : 'text-slate-500 hover:text-rose-600'}`}
-                                    >
-                                        <span>Mural de Carinho</span>
-                                        <span className={`px-1.5 py-0.2 rounded-full text-[10px] font-black ${activeTab === 'mural' ? 'bg-white text-rose-600' : 'bg-rose-100 text-rose-600'}`}>
-                                            {totalCarinhos}
-                                        </span>
-                                    </button>
+                <div className="fixed inset-0 z-[120] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm no-print">
+                    <div className="bg-white rounded-[2.5rem] shadow-2xl w-full max-w-lg overflow-hidden relative border border-rose-100 flex flex-col max-h-[90vh]">
+                        {/* Header */}
+                        <div className="p-6 pb-4 border-b border-rose-50 flex items-start justify-between bg-gradient-to-b from-rose-50/70 to-white">
+                            <div>
+                                <div className="flex items-center gap-2 text-rose-500 font-extrabold text-xl">
+                                    <span>❤️</span>
+                                    <span>Mande um carinho!</span>
                                 </div>
-                            )}
+                                <p className="text-xs text-slate-500 mt-1 font-medium">
+                                    {selectedNre ? `Tutores de Formação — ${selectedNre.name.replace('NRE ', '')}` : 'Busque pelo NRE ou pelo nome do tutor, ou escolha um NRE na lista.'}
+                                </p>
+                            </div>
+                            <button onClick={handleClose} className="p-2 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 transition-colors">
+                                <IconX />
+                            </button>
+                        </div>
 
-                            {activeTab === 'info' ? (
-                                <div className="mt-4 w-full space-y-2 text-left">
-                                    {email && (
-                                        <div className="flex items-center gap-3 p-3.5 rounded-2xl bg-slate-50 border border-slate-100">
-                                            <div className="p-2 rounded-xl bg-white shadow-sm text-slate-400 shrink-0"><IconMail /></div>
-                                            <div className="overflow-hidden">
-                                                <p className="text-[9px] font-black uppercase text-slate-400 tracking-wider">E-mail Institucional</p>
-                                                <p className="text-xs font-bold text-slate-700 truncate">{email}</p>
-                                            </div>
-                                        </div>
-                                    )}
-                                    {phone && (
-                                        <div className="flex items-center gap-3 p-3.5 rounded-2xl bg-slate-50 border border-slate-100">
-                                            <div className="p-2 rounded-xl bg-white shadow-sm text-slate-400 shrink-0"><IconPhone /></div>
-                                            <div className="overflow-hidden">
-                                                <p className="text-[9px] font-black uppercase text-slate-400 tracking-wider">Telefone / Ramal</p>
-                                                <p className="text-xs font-bold text-slate-700 truncate">{phone}</p>
-                                            </div>
-                                        </div>
-                                    )}
+                        {/* Campo de Busca */}
+                        <div className="px-6 pt-4 pb-2">
+                            <div className="relative">
+                                <div className="absolute left-4 top-1/2 -translate-y-1/2 text-rose-400">
+                                    <IconSearch />
+                                </div>
+                                <input
+                                    type="text"
+                                    placeholder={selectedNre ? "Filtrar tutor deste NRE..." : "NRE ou nome do tutor..."}
+                                    value={search}
+                                    onChange={(e) => setSearch(e.target.value)}
+                                    className="w-full pl-12 pr-4 py-3 bg-white rounded-2xl border-2 border-rose-200 focus:border-rose-400 outline-none text-slate-700 font-semibold text-sm transition-all"
+                                />
+                            </div>
+                        </div>
 
-                                    {!isNre && (
-                                        <button 
-                                            onClick={() => {
-                                                onClose();
-                                                onOpenCarinhoForTutor(item);
-                                            }}
-                                            className="w-full mt-3 py-3 rounded-2xl bg-gradient-to-r from-rose-500 to-pink-500 text-white font-black uppercase tracking-wider text-xs shadow-md shadow-rose-200 hover:from-rose-600 hover:to-pink-600 transition flex items-center justify-center gap-2"
-                                        >
-                                            <IconHeart fill="white" />
-                                            <span>Mandar um Carinho para {displayName}</span>
-                                        </button>
-                                    )}
+                        {/* Conteúdo rolável */}
+                        <div className="p-6 overflow-y-auto custom-scrollbar flex-1">
+                            {!selectedNre ? (
+                                <div>
+                                    <p className="text-[11px] font-black uppercase tracking-wider text-rose-400 mb-3">NRES ({filteredNres.length})</p>
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                        {filteredNres.map(nre => (
+                                            <div 
+                                                key={nre.id}
+                                                onClick={() => { setSelectedNre(nre); setSearch(''); }}
+                                                className="p-4 rounded-2xl border border-rose-100 hover:border-rose-300 bg-rose-50/20 hover:bg-rose-50/60 transition-all cursor-pointer group flex items-start gap-3"
+                                            >
+                                                <div className="p-2.5 rounded-xl bg-white shadow-sm text-rose-500 group-hover:scale-110 transition-transform">
+                                                    <IconMapPin />
+                                                </div>
+                                                <div className="overflow-hidden">
+                                                    <h4 className="font-extrabold text-xs text-slate-800 uppercase tracking-tight truncate group-hover:text-rose-600 transition-colors">
+                                                        {nre.name.replace('NRE ', '')}
+                                                    </h4>
+                                                    <p className="text-[10px] font-bold text-rose-500 mt-0.5">
+                                                        {nre.tutores.length} {nre.tutores.length === 1 ? 'tutor' : 'tutores'}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
                                 </div>
                             ) : (
-                                <div className="mt-4 w-full space-y-4 text-left">
-                                    <div className="grid grid-cols-3 gap-2 text-center">
-                                        <div className="p-3 bg-amber-50 border border-amber-200 rounded-2xl">
-                                            <span className="text-xl">😊</span>
-                                            <p className="text-base font-black text-amber-700 mt-1">{tutorStats.smile || 0}</p>
-                                            <p className="text-[9px] font-black uppercase text-amber-600 tracking-wider">Sorrisos</p>
-                                        </div>
-                                        <div className="p-3 bg-emerald-50 border border-emerald-200 rounded-2xl">
-                                            <span className="text-xl">🤝</span>
-                                            <p className="text-base font-black text-emerald-700 mt-1">{tutorStats.handshake || 0}</p>
-                                            <p className="text-[9px] font-black uppercase text-emerald-600 tracking-wider">Parcerias</p>
-                                        </div>
-                                        <div className="p-3 bg-rose-50 border border-rose-200 rounded-2xl">
-                                            <span className="text-xl">❤️</span>
-                                            <p className="text-base font-black text-rose-700 mt-1">{tutorStats.heart || 0}</p>
-                                            <p className="text-[9px] font-black uppercase text-rose-600 tracking-wider">Corações</p>
-                                        </div>
+                                <div>
+                                    <div className="flex items-center gap-3 mb-4">
+                                        <button 
+                                            onClick={() => { setSelectedNre(null); setSearch(''); }}
+                                            className="flex items-center gap-1.5 text-xs font-black uppercase text-rose-500 hover:text-rose-700 transition-colors"
+                                        >
+                                            <IconArrowLeft /> Voltar aos NREs
+                                        </button>
                                     </div>
+                                    <p className="text-xs text-slate-500 mb-4 bg-rose-50 p-3 rounded-xl border border-rose-100 font-medium leading-relaxed">
+                                        Escolha o gesto de carinho para o tutor — o envio é anônimo e chega como incentivo pelo trabalho formativo! 💛
+                                    </p>
 
-                                    <div className="p-4 bg-slate-50 border border-slate-100 rounded-2xl text-center">
-                                        <p className="text-xs text-slate-500 font-medium">Total de gestos de carinho recebidos: <strong className="text-rose-600 font-extrabold">{totalCarinhos}</strong></p>
-                                        <p className="text-[11px] text-slate-400 mt-0.5">Reconhecimento anônimo enviado pela rede de formadores.</p>
+                                    <div className="flex flex-col gap-3">
+                                        {selectedNre.tutores
+                                            .filter(t => !search || t.name.toLowerCase().includes(search.toLowerCase()))
+                                            .map(tutor => {
+                                                const stats = reactions[tutor.id] || { smile: 0, partner: 0, heart: 0 };
+                                                return (
+                                                    <div key={tutor.id} className="p-4 rounded-2xl border border-rose-100 bg-white shadow-sm flex items-center justify-between gap-3 hover:border-rose-200 transition-all">
+                                                        <div className="flex items-center gap-3 min-w-0">
+                                                            <div className="w-12 h-12 rounded-full overflow-hidden border-2 border-rose-300 flex-shrink-0">
+                                                                <SafeImage 
+                                                                    src={tutor.photoUrl} 
+                                                                    alt={tutor.name} 
+                                                                    className="w-full h-full object-cover" 
+                                                                    fallbackName={tutor.name} 
+                                                                />
+                                                            </div>
+                                                            <div className="truncate">
+                                                                <h4 className="font-extrabold text-sm text-slate-800 uppercase leading-snug truncate">{tutor.name}</h4>
+                                                                <p className="text-[10px] text-slate-400 font-bold uppercase">{selectedNre.name}</p>
+                                                            </div>
+                                                        </div>
+
+                                                        {/* Botões dos 3 Emojis */}
+                                                        <div className="flex items-center gap-1.5 flex-shrink-0">
+                                                            <button 
+                                                                title="Enviar Sorriso"
+                                                                onClick={() => onSendCarinho(tutor, selectedNre, 'smile')}
+                                                                className="w-10 h-10 rounded-2xl border-2 border-amber-300 hover:border-amber-400 bg-amber-50/50 hover:bg-amber-100 text-lg flex items-center justify-center transition-all active:scale-90"
+                                                            >
+                                                                😊
+                                                            </button>
+                                                            <button 
+                                                                title="Enviar Parceria"
+                                                                onClick={() => onSendCarinho(tutor, selectedNre, 'partner')}
+                                                                className="w-10 h-10 rounded-2xl border-2 border-emerald-300 hover:border-emerald-400 bg-emerald-50/50 hover:bg-emerald-100 text-lg flex items-center justify-center transition-all active:scale-90"
+                                                            >
+                                                                🤝
+                                                            </button>
+                                                            <button 
+                                                                title="Enviar Coração"
+                                                                onClick={() => onSendCarinho(tutor, selectedNre, 'heart')}
+                                                                className="w-10 h-10 rounded-2xl border-2 border-rose-300 hover:border-rose-400 bg-rose-50/50 hover:bg-rose-100 text-lg flex items-center justify-center transition-all active:scale-90"
+                                                            >
+                                                                ❤️
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                );
+                                            })}
                                     </div>
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                </div>
+            );
+        };
 
+        // Modal Detalhes do Tutor / NRE com Mural de Carinho
+        const DetailsModal = ({ item, type, onClose, reactions }) => {
+            const [tab, setTab] = useState('info');
+            if (!item) return null;
+
+            const isTutor = type === 'tutor';
+            const stats = isTutor ? (reactions[item.id] || { smile: 0, partner: 0, heart: 0 }) : null;
+            const totalCarinhos = stats ? (stats.smile + stats.partner + stats.heart) : 0;
+
+            return (
+                <div className="fixed inset-0 z-[110] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm no-print">
+                    <div className="bg-white rounded-[2.5rem] shadow-2xl w-full max-w-md overflow-hidden relative border border-slate-100">
+                        <button onClick={onClose} className="absolute top-6 right-6 p-2 rounded-full bg-white/90 text-slate-500 hover:bg-white transition-colors z-10 shadow-sm">
+                            <IconX />
+                        </button>
+                        
+                        {/* Top Banner */}
+                        <div className="h-32 w-full bg-gradient-to-r from-emerald-600 via-teal-600 to-sky-700"></div>
+
+                        <div className="px-8 pb-8 flex flex-col items-center -mt-16 text-center">
+                            {isTutor ? (
+                                <div className="w-28 h-28 rounded-full border-4 border-white shadow-xl overflow-hidden bg-white mb-3">
+                                    <SafeImage 
+                                        src={item.photoUrl} 
+                                        alt={item.name} 
+                                        className="w-full h-full object-cover" 
+                                        fallbackName={item.name}
+                                    />
+                                </div>
+                            ) : (
+                                <div className="w-24 h-24 rounded-full border-4 border-white shadow-xl overflow-hidden bg-white mb-3 flex items-center justify-center text-emerald-600 text-3xl">
+                                    🏛️
+                                </div>
+                            )}
+
+                            <h2 className="text-2xl font-black text-slate-900 uppercase tracking-tight">{item.name}</h2>
+                            <p className="text-xs font-black uppercase tracking-wider text-emerald-600 mt-0.5">
+                                {isTutor ? `${item.role} • ${item.nreName}` : 'Núcleo Regional de Educação'}
+                            </p>
+
+                            {/* Tabs (quando for tutor) */}
+                            {isTutor && (
+                                <div className="flex bg-slate-100 p-1 rounded-2xl mt-5 w-full">
                                     <button 
-                                        onClick={() => {
-                                            onClose();
-                                            onOpenCarinhoForTutor(item);
-                                        }}
-                                        className="w-full py-2.5 rounded-xl bg-rose-500 hover:bg-rose-600 text-white font-extrabold text-xs shadow-sm transition"
+                                        onClick={() => setTab('info')} 
+                                        className={`flex-1 py-2 rounded-xl text-xs font-black uppercase tracking-wider transition-all ${tab === 'info' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
                                     >
-                                        Enviar Novo Gesto 💛
+                                        Contatos
+                                    </button>
+                                    <button 
+                                        onClick={() => setTab('mural')} 
+                                        className={`flex-1 py-2 rounded-xl text-xs font-black uppercase tracking-wider transition-all flex items-center justify-center gap-1.5 ${tab === 'mural' ? 'bg-white text-rose-600 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
+                                    >
+                                        <span>Mural de Carinho</span>
+                                        {totalCarinhos > 0 && <span className="bg-rose-500 text-white text-[10px] px-2 py-0.5 rounded-full">{totalCarinhos}</span>}
                                     </button>
                                 </div>
                             )}
 
-                            <button 
-                                onClick={onClose} 
-                                className="mt-5 w-full py-3 rounded-2xl bg-slate-900 text-white font-black uppercase tracking-wider text-xs hover:bg-slate-800 shadow-md transition-all active:scale-95"
-                            >
+                            {/* Conteúdo Aba Info */}
+                            {(!isTutor || tab === 'info') && (
+                                <div className="mt-5 w-full flex flex-col gap-2.5 text-left">
+                                    <div className="p-4 rounded-2xl bg-slate-50 border border-slate-100 flex items-center gap-3">
+                                        <div className="p-2.5 rounded-xl bg-white shadow-xs text-slate-400">
+                                            <IconMail />
+                                        </div>
+                                        <div className="overflow-hidden">
+                                            <p className="text-[10px] font-black uppercase text-slate-400 tracking-wider">E-mail Institucional</p>
+                                            <p className="text-xs font-bold text-slate-700 break-all">{item.email || 'nre_formadores@escola.pr.gov.br'}</p>
+                                        </div>
+                                    </div>
+
+                                    {item.phone && (
+                                        <div className="p-4 rounded-2xl bg-slate-50 border border-slate-100 flex items-center gap-3">
+                                            <div className="p-2.5 rounded-xl bg-white shadow-xs text-slate-400">
+                                                <IconPhone />
+                                            </div>
+                                            <div>
+                                                <p className="text-[10px] font-black uppercase text-slate-400 tracking-wider">Telefone do NRE</p>
+                                                <p className="text-xs font-bold text-slate-700">{item.phone}</p>
+                                            </div>
+                                        </div>
+                                    )}
+
+                                    <div className="p-4 rounded-2xl bg-slate-50 border border-slate-100 flex items-center gap-3">
+                                        <div className="p-2.5 rounded-xl bg-white shadow-xs text-slate-400">
+                                            <IconMapPin />
+                                        </div>
+                                        <div>
+                                            <p className="text-[10px] font-black uppercase text-slate-400 tracking-wider">Lotação Regional</p>
+                                            <p className="text-xs font-bold text-slate-700">{isTutor ? item.nreName : 'Estado do Paraná'}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+
+                            {/* Conteúdo Aba Mural */}
+                            {isTutor && tab === 'mural' && (
+                                <div className="mt-5 w-full text-left">
+                                    <div className="p-4 bg-rose-50/60 rounded-2xl border border-rose-100 text-center mb-4">
+                                        <p className="text-xs font-bold text-rose-700 leading-tight">
+                                            Reconhecimento anônimo enviado por cursistas e colegas educadores pelo portal 💛
+                                        </p>
+                                    </div>
+
+                                    <div className="grid grid-cols-3 gap-2 text-center mb-4">
+                                        <div className="p-3 bg-amber-50 rounded-2xl border border-amber-100">
+                                            <span className="text-2xl block">😊</span>
+                                            <span className="text-lg font-black text-amber-700">{stats.smile}</span>
+                                            <p className="text-[9px] uppercase font-black text-amber-500 tracking-wider">Sorrisos</p>
+                                        </div>
+                                        <div className="p-3 bg-emerald-50 rounded-2xl border border-emerald-100">
+                                            <span className="text-2xl block">🤝</span>
+                                            <span className="text-lg font-black text-emerald-700">{stats.partner}</span>
+                                            <p className="text-[9px] uppercase font-black text-emerald-500 tracking-wider">Parceria</p>
+                                        </div>
+                                        <div className="p-3 bg-rose-50 rounded-2xl border border-rose-100">
+                                            <span className="text-2xl block">❤️</span>
+                                            <span className="text-lg font-black text-rose-700">{stats.heart}</span>
+                                            <p className="text-[9px] uppercase font-black text-rose-500 tracking-wider">Corações</p>
+                                        </div>
+                                    </div>
+
+                                    <div className="text-center p-3 bg-slate-50 rounded-xl">
+                                        <p className="text-xs font-bold text-slate-600">Total de gestos recebidos: <span className="font-black text-rose-600">{totalCarinhos}</span></p>
+                                    </div>
+                                </div>
+                            )}
+
+                            <button onClick={onClose} className="mt-6 w-full py-3.5 rounded-2xl bg-slate-900 text-white font-black uppercase tracking-widest text-xs hover:bg-slate-800 transition-all">
                                 Fechar
                             </button>
                         </div>
@@ -609,326 +754,63 @@
             );
         };
 
-        const MandeCarinhoModal = ({ nres, isOpen, onClose, stats = {}, onSaveCarinho, initialTutor = null }) => {
-            const [selectedNre, setSelectedNre] = useState(null);
-            const [searchTerm, setSearchTerm] = useState('');
-            const [feedbackToast, setFeedbackToast] = useState(null);
-            const [isSending, setIsSending] = useState(false);
-
-            useEffect(() => {
-                if (initialTutor && isOpen) {
-                    const foundNre = nres.find(n => n.name === initialTutor.nreName) || nres[0];
-                    setSelectedNre(foundNre);
-                }
-            }, [initialTutor, isOpen]);
-
-            if (!isOpen) return null;
-
-            const handleClose = () => {
-                setSelectedNre(null);
-                setSearchTerm('');
-                setFeedbackToast(null);
-                onClose();
-            };
-
-            const sendGest = async (tutor, nreObj, gestType) => {
-                setIsSending(true);
-
-                const gestNames = {
-                    smile: 'um Sorriso de Gratidão 😊',
-                    handshake: 'um Abraço e Parceria 🤝',
-                    heart: 'um Coração de Reconhecimento ❤️'
-                };
-
-                const emailDestino = nreObj.email || tutor.email;
-
-                await onSaveCarinho(tutor.id, gestType, {
-                    tutorName: tutor.name,
-                    nreName: nreObj.name,
-                    tutorEmail: emailDestino
-                });
-
-                setIsSending(false);
-
-                setFeedbackToast({
-                    tutorName: tutor.name,
-                    nreName: nreObj.name,
-                    tutorEmail: emailDestino,
-                    gest: gestNames[gestType]
-                });
-
-                setTimeout(() => {
-                    setFeedbackToast(null);
-                }, 4800);
-            };
-
-            const filteredNres = nres.filter(nre => {
-                const term = searchTerm.toLowerCase().trim();
-                if (!term) return true;
-                const matchesNre = nre.name.toLowerCase().includes(term);
-                const matchesTutor = nre.tutores.some(t => t.name.toLowerCase().includes(term));
-                return matchesNre || matchesTutor;
-            });
-
-            const currentTutores = selectedNre 
-                ? selectedNre.tutores.filter(t => !searchTerm || t.name.toLowerCase().includes(searchTerm.toLowerCase().trim()))
-                : [];
-
-            return (
-                <div className="fixed inset-0 z-[120] flex items-center justify-center p-3 sm:p-4 bg-slate-900/60 backdrop-blur-sm no-print">
-                    <div className="bg-[#f8fafc] rounded-[2rem] sm:rounded-[2.5rem] shadow-2xl w-full max-w-[500px] overflow-hidden relative border border-pink-100 flex flex-col max-h-[92vh]">
-                        <button 
-                            onClick={handleClose} 
-                            className="absolute top-4 right-4 p-2 rounded-full text-slate-400 hover:text-slate-600 hover:bg-slate-200/50 transition-colors z-20"
-                        >
-                            <IconX />
-                        </button>
-
-                        {feedbackToast && (
-                            <div className="absolute top-3 left-4 right-14 z-30 bg-emerald-600 text-white px-4 py-3 rounded-2xl shadow-xl flex items-start gap-3 text-xs font-bold">
-                                <span className="text-xl">✨</span>
-                                <div className="space-y-0.5">
-                                    <p className="font-extrabold text-[13px]">Gesto enviado!</p>
-                                    <p className="text-[11px] text-emerald-100 font-medium leading-snug">
-                                        Você enviou {feedbackToast.gest} para <strong>{feedbackToast.tutorName}</strong> (NRE {feedbackToast.nreName}).
-                                    </p>
-                                </div>
-                            </div>
-                        )}
-
-                        <div className="p-5 sm:p-6 pb-2 bg-white border-b border-slate-100">
-                            {selectedNre ? (
-                                <div>
-                                    <div className="flex items-center gap-2 text-rose-600 font-extrabold text-base sm:text-lg">
-                                        <button 
-                                            onClick={() => { setSelectedNre(null); setSearchTerm(''); }}
-                                            className="p-1 -ml-1 text-slate-500 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition"
-                                            title="Voltar para a lista de NREs"
-                                        >
-                                            <IconChevronLeft />
-                                        </button>
-                                        <span className="truncate">Tutores — {selectedNre.name}</span>
-                                    </div>
-                                    <p className="text-xs text-slate-500 font-medium mt-1 leading-snug">
-                                        Use a busca para filtrar ou escolha o gesto — é anônimo e chega ao tutor 💛
-                                    </p>
-                                </div>
-                            ) : (
-                                <div>
-                                    <div className="flex items-center gap-2 text-rose-600 font-extrabold text-lg sm:text-xl">
-                                        <span className="text-rose-500"><IconHeart fill="#e11d48" /></span>
-                                        <span>Mande um carinho!</span>
-                                    </div>
-                                    <p className="text-xs text-slate-500 font-medium mt-1 leading-snug">
-                                        Busque pelo NRE ou pelo nome do tutor, ou selecione na lista abaixo.
-                                    </p>
-                                </div>
-                            )}
-
-                            <div className="mt-4 relative">
-                                <div className="absolute left-3.5 top-1/2 -translate-y-1/2 text-rose-400">
-                                    <IconSearch />
-                                </div>
-                                <input 
-                                    type="text" 
-                                    placeholder={selectedNre ? "Buscar tutor neste NRE..." : "NRE ou nome do tutor..."} 
-                                    value={searchTerm}
-                                    onChange={(e) => setSearchTerm(e.target.value)}
-                                    className="w-full pl-11 pr-4 py-2.5 sm:py-3 bg-white border-2 border-rose-200 focus:border-rose-400 rounded-2xl outline-none text-xs sm:text-sm text-slate-700 font-medium shadow-sm transition"
-                                />
-                            </div>
-                        </div>
-
-                        <div className="p-4 sm:p-6 overflow-y-auto flex-1 space-y-3 bg-[#fafaf9]">
-                            {selectedNre ? (
-                                <div className="space-y-3">
-                                    {currentTutores.length === 0 ? (
-                                        <div className="text-center py-10 text-xs text-slate-400 font-semibold">
-                                            Nenhum tutor encontrado com esse nome neste NRE.
-                                        </div>
-                                    ) : (
-                                        currentTutores.map(tutor => {
-                                            const tutorData = stats[tutor.id] || { smile: 0, handshake: 0, heart: 0 };
-
-                                            return (
-                                                <div 
-                                                    key={tutor.id} 
-                                                    className="p-3.5 bg-white rounded-2xl border border-rose-100 shadow-sm hover:shadow-md transition-shadow flex items-center justify-between gap-3"
-                                                >
-                                                    <div className="flex items-center gap-3 overflow-hidden">
-                                                        <div className="w-12 h-12 rounded-full border-2 border-rose-200 overflow-hidden shrink-0 bg-slate-100">
-                                                            <SafeImage 
-                                                                src={tutor.driveUrl} 
-                                                                alt={tutor.name} 
-                                                                className="w-full h-full object-cover" 
-                                                                fallbackName={tutor.name} 
-                                                            />
-                                                        </div>
-                                                        <div className="overflow-hidden">
-                                                            <h4 className="font-extrabold text-slate-800 text-xs sm:text-sm leading-tight truncate">
-                                                                {tutor.name}
-                                                            </h4>
-                                                            <p className="text-[10px] text-slate-400 font-bold uppercase tracking-tight mt-0.5">
-                                                                Tutor(a) de Formação
-                                                            </p>
-                                                        </div>
-                                                    </div>
-
-                                                    <div className="flex items-center gap-1.5 shrink-0">
-                                                        <button 
-                                                            disabled={isSending}
-                                                            onClick={() => sendGest(tutor, selectedNre, 'smile')}
-                                                            className="p-2 sm:p-2.5 rounded-xl border border-amber-300 text-amber-500 hover:bg-amber-50 hover:scale-110 active:scale-95 transition-all shadow-sm relative" 
-                                                            title="Mandar Sorriso / Gratidão"
-                                                        >
-                                                            <IconSmile />
-                                                            <span className="absolute -top-1.5 -right-1.5 bg-amber-500 text-white text-[9px] px-1 rounded-full font-bold">
-                                                                {tutorData.smile || 0}
-                                                            </span>
-                                                        </button>
-                                                        
-                                                        <button 
-                                                            disabled={isSending}
-                                                            onClick={() => sendGest(tutor, selectedNre, 'handshake')}
-                                                            className="p-2 sm:p-2.5 rounded-xl border border-emerald-300 text-emerald-500 hover:bg-emerald-50 hover:scale-110 active:scale-95 transition-all shadow-sm relative" 
-                                                            title="Mandar Abraço e Parceria"
-                                                        >
-                                                            <IconHandshake />
-                                                            <span className="absolute -top-1.5 -right-1.5 bg-emerald-600 text-white text-[9px] px-1 rounded-full font-bold">
-                                                                {tutorData.handshake || 0}
-                                                            </span>
-                                                        </button>
-
-                                                        <button 
-                                                            disabled={isSending}
-                                                            onClick={() => sendGest(tutor, selectedNre, 'heart')}
-                                                            className="p-2 sm:p-2.5 rounded-xl border border-rose-300 text-rose-500 hover:bg-rose-50 hover:scale-110 active:scale-95 transition-all shadow-sm relative" 
-                                                            title="Mandar Coração de Reconhecimento"
-                                                        >
-                                                            <IconHeart />
-                                                            <span className="absolute -top-1.5 -right-1.5 bg-rose-500 text-white text-[9px] px-1 rounded-full font-bold">
-                                                                {tutorData.heart || 0}
-                                                            </span>
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            );
-                                        })
-                                    )}
-                                </div>
-                            ) : (
-                                <div>
-                                    <span className="text-[10px] font-black uppercase text-rose-500 tracking-wider mb-2.5 block">
-                                        NRES
-                                    </span>
-                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-                                        {filteredNres.map(nre => (
-                                            <button 
-                                                key={nre.id} 
-                                                onClick={() => { setSelectedNre(nre); setSearchTerm(''); }}
-                                                className="flex items-start gap-2.5 p-3 rounded-2xl bg-white border border-rose-100 hover:border-rose-300 hover:shadow-md transition text-left group active:scale-[0.98]"
-                                            >
-                                                <div className="p-1 rounded-lg text-rose-400 group-hover:text-rose-600 transition shrink-0 mt-0.5">
-                                                    <IconMapPin />
-                                                </div>
-                                                <div className="overflow-hidden">
-                                                    <h5 className="text-xs font-extrabold text-rose-950 group-hover:text-rose-600 transition leading-tight truncate">
-                                                        {nre.name}
-                                                    </h5>
-                                                    <p className="text-[10px] text-rose-400 font-semibold mt-0.5">
-                                                        {nre.tutores.length} {nre.tutores.length > 1 ? 'tutores' : 'tutor'}
-                                                    </p>
-                                                </div>
-                                            </button>
-                                        ))}
-                                    </div>
-                                </div>
-                            )}
-                        </div>
-
-                    </div>
-                </div>
-            );
-        };
-
-        const PersonCard = ({ person, color, searchTerm, onClick, nreInfo, stats = {} }) => {
-            const matches = searchTerm && (
-                person.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
-                person.role.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                (nreInfo && nreInfo.name.toLowerCase().includes(searchTerm.toLowerCase()))
-            );
+        // Card do Tutor individual (sempre visível dentro do NRE)
+        const TutorCard = ({ tutor, nre, searchTerm, onClick }) => {
+            const matches = searchTerm && (tutor.name.toLowerCase().includes(searchTerm.toLowerCase()) || nre.name.toLowerCase().includes(searchTerm.toLowerCase()));
 
             return (
                 <div 
-                    onClick={() => onClick({ ...person, email: nreInfo?.email, phone: nreInfo?.phone, nreName: nreInfo?.name }, color)} 
-                    className={`flex items-center gap-3 p-3.5 rounded-2xl bg-white border border-slate-100 shadow-sm transition-all h-full w-full cursor-pointer group ${matches ? 'ring-4 ring-pink-500 scale-[1.03] z-10 shadow-pink-100' : 'hover:border-slate-300 hover:shadow-md active:scale-95'}`}
+                    onClick={() => onClick({ ...tutor, nreName: nre.name, email: nre.email, phone: nre.phone }, 'tutor')}
+                    className={`flex items-center gap-3 p-3 rounded-2xl bg-white border border-slate-100 shadow-xs transition-all cursor-pointer group ${matches ? 'ring-4 ring-pink-500 scale-[1.02] shadow-pink-100' : 'hover:border-slate-300 hover:shadow-md active:scale-95'}`}
                 >
-                    <div className="w-12 h-12 rounded-full border-2 border-slate-100 overflow-hidden shrink-0 group-hover:scale-105 transition-transform" style={{ borderColor: color || COLORS.slate }}>
+                    <div className="w-12 h-12 rounded-full border-2 border-emerald-500 overflow-hidden flex-shrink-0 group-hover:scale-105 transition-transform">
                         <SafeImage 
-                            src={person.driveUrl} 
-                            alt={person.name} 
-                            className="w-full h-full object-cover transition-transform" 
-                            fallbackName={person.name}
+                            src={tutor.photoUrl} 
+                            alt={tutor.name} 
+                            className="w-full h-full object-cover" 
+                            fallbackName={tutor.name}
                         />
                     </div>
-                    <div className="overflow-hidden min-w-0 flex-1">
-                        <h4 className="font-extrabold text-slate-800 text-[11px] uppercase leading-tight truncate">{person.name}</h4>
-                        <p className="text-[9px] text-slate-500 font-bold uppercase tracking-tight mt-0.5 truncate">{person.role}</p>
+                    <div className="overflow-hidden">
+                        <h4 className="font-extrabold text-slate-800 text-[11px] uppercase leading-tight truncate">{tutor.name}</h4>
+                        <p className="text-[9px] text-slate-400 font-bold uppercase tracking-tight mt-0.5">{tutor.role}</p>
                     </div>
                 </div>
             );
         };
 
-        const NreCard = ({ nre, searchTerm, onSelect, forceExpanded, stats = {} }) => {
-            const [isExpanded, setIsExpanded] = useState(true);
-            const expanded = forceExpanded !== null ? forceExpanded : isExpanded;
-
-            const matchesNre = searchTerm && (
-                nre.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                nre.email.toLowerCase().includes(searchTerm.toLowerCase())
-            );
+        // Coluna do NRE (sem o botão de recolher: lista de tutores fica sempre aberta)
+        const NreColumn = ({ nre, searchTerm, onSelect }) => {
+            const totalTutores = nre.tutores.length;
 
             return (
-                <div className={`flex flex-col gap-3 w-full print:max-w-none ${matchesNre ? 'ring-2 ring-blue-500 rounded-3xl p-1' : ''}`}>
+                <div className="flex flex-col gap-4 w-full">
+                    {/* Card Principal do NRE */}
                     <div 
-                        style={{ borderTop: `6px solid ${nre.color}` }} 
-                        className="bg-white p-6 rounded-3xl shadow-lg border border-slate-100 flex flex-col items-center text-center cursor-pointer hover:shadow-xl transition-shadow group print:shadow-none print:border-t-4"
-                        onClick={() => onSelect(nre, nre.color)}
+                        style={{ borderTop: `6px solid ${COLORS.seedGreen}` }}
+                        className="bg-white p-6 rounded-3xl shadow-lg border border-slate-100 flex flex-col items-center text-center cursor-pointer hover:shadow-xl transition-shadow group"
+                        onClick={() => onSelect(nre, 'nre')}
                     >
-                        <h2 className="text-base font-black text-slate-900 uppercase leading-snug tracking-tight">
-                            NRE {nre.name}
-                        </h2>
-
-                        <p className="text-[11px] text-slate-400 font-bold uppercase mt-1">
-                            {nre.tutores.length} {nre.tutores.length > 1 ? 'Tutores de Formação' : 'Tutor de Formação'}
-                        </p>
-
-                        <button 
-                            onClick={(e) => { e.stopPropagation(); setIsExpanded(!expanded); }} 
-                            className="mt-4 w-full flex items-center justify-center gap-1.5 py-2 border-t border-slate-50 text-slate-400 hover:text-slate-700 transition-colors print:hidden"
-                        >
-                            <span className="text-[10px] font-black uppercase tracking-wider">
-                                {expanded ? 'Recolher Tutores' : `Ver Tutores (${nre.tutores.length})`}
-                            </span>
-                            {expanded ? <IconChevronDown /> : <IconChevronRight />}
-                        </button>
+                        <h3 className="text-lg font-black text-slate-900 uppercase tracking-tight leading-tight group-hover:text-emerald-700 transition-colors">
+                            {nre.name}
+                        </h3>
+                        <span className="mt-2 px-3 py-0.5 rounded-full text-[10px] font-black text-emerald-800 bg-emerald-50 uppercase tracking-wider">
+                            {totalTutores} {totalTutores === 1 ? 'Tutor' : 'Tutores'}
+                        </span>
                     </div>
 
-                    {expanded && (
-                        <div className="grid grid-cols-1 gap-2 print:grid-cols-1">
-                            {nre.tutores.map(tutor => (
-                                <PersonCard 
-                                    key={tutor.id} 
-                                    person={tutor} 
-                                    color={nre.color} 
-                                    searchTerm={searchTerm} 
-                                    onClick={onSelect}
-                                    nreInfo={nre}
-                                    stats={stats}
-                                />
-                            ))}
-                        </div>
-                    )}
+                    {/* Lista de Tutores (sempre aberta) */}
+                    <div className="grid grid-cols-1 gap-2.5">
+                        {nre.tutores.map(tutor => (
+                            <TutorCard 
+                                key={tutor.id} 
+                                tutor={tutor} 
+                                nre={nre} 
+                                searchTerm={searchTerm} 
+                                onClick={onSelect} 
+                            />
+                        ))}
+                    </div>
                 </div>
             );
         };
@@ -937,55 +819,34 @@
             const [searchTerm, setSearchTerm] = useState('');
             const [zoom, setZoom] = useState(1);
             const [selectedItem, setSelectedItem] = useState(null);
-            const [selectedColor, setSelectedColor] = useState(null);
-            const [forceExpanded, setForceExpanded] = useState(true);
+            const [selectedType, setSelectedType] = useState(null);
             const [isCarinhoOpen, setIsCarinhoOpen] = useState(false);
-            const [showCarinhoToastCard, setShowCarinhoToastCard] = useState(true);
-            const [initialCarinhoTutor, setInitialCarinhoTutor] = useState(null);
-
-            const [carinhosStats, setCarinhosStats] = useState({
-                'apu_1': { smile: 8, handshake: 5, heart: 12 },
-                'cta_1': { smile: 14, handshake: 9, heart: 22 },
-                'mga_1': { smile: 11, handshake: 6, heart: 18 }
-            });
-
-            const handleSaveCarinho = (tutorId, gestType, meta) => {
-                setCarinhosStats(prev => {
-                    const current = prev[tutorId] || { smile: 0, handshake: 0, heart: 0 };
-                    return {
-                        ...prev,
-                        [tutorId]: {
-                            ...current,
-                            [gestType]: (current[gestType] || 0) + 1
-                        }
-                    };
-                });
-            };
+            const [reactions, setReactions] = useState(initialReactions);
+            const [toastMessage, setToastMessage] = useState(null);
 
             const totalTutores = useMemo(() => {
                 return nresData.reduce((acc, curr) => acc + curr.tutores.length, 0);
             }, []);
 
-            const filteredNres = useMemo(() => {
-                const term = searchTerm.toLowerCase().trim();
-                if (!term) return nresData;
-                return nresData.filter(item => {
-                    return (
-                        item.name.toLowerCase().includes(term) ||
-                        item.email.toLowerCase().includes(term) ||
-                        item.tutores.some(t => t.name.toLowerCase().includes(term))
-                    );
-                });
-            }, [searchTerm]);
-
-            const handleSelect = (item, color) => {
-                setSelectedItem(item);
-                setSelectedColor(color);
+            const showToast = (msg) => {
+                setToastMessage(msg);
+                setTimeout(() => setToastMessage(null), 4000);
             };
 
-            const handleOpenCarinhoForTutor = (tutor) => {
-                setInitialCarinhoTutor(tutor);
-                setIsCarinhoOpen(true);
+            const handleSendCarinho = (tutor, nre, gestureType) => {
+                setReactions(prev => {
+                    const current = prev[tutor.id] || { smile: 0, partner: 0, heart: 0 };
+                    return {
+                        ...prev,
+                        [tutor.id]: {
+                            ...current,
+                            [gestureType]: current[gestureType] + 1
+                        }
+                    };
+                });
+
+                const emojis = { smile: '😊 Sorriso', partner: '🤝 Parceria', heart: '❤️ Coração' };
+                showToast(`Gesto de ${emojis[gestureType]} enviado com carinho para ${tutor.name}!`);
             };
 
             const handlePrint = () => {
@@ -995,197 +856,149 @@
                 setTimeout(() => {
                     try { window.print(); } catch (err) {}
                     setZoom(originalZoom);
-                }, 500);
+                }, 400);
             };
 
             return (
-                <div className="min-h-screen p-4 sm:p-6 md:p-12 print:bg-white print:p-4">
-                    <Modal 
-                        item={selectedItem} 
-                        color={selectedColor} 
-                        stats={carinhosStats}
-                        onClose={() => setSelectedItem(null)} 
-                        onOpenCarinhoForTutor={handleOpenCarinhoForTutor}
-                    />
-                    
-                    <MandeCarinhoModal 
-                        nres={nresData} 
-                        isOpen={isCarinhoOpen} 
-                        stats={carinhosStats}
-                        initialTutor={initialCarinhoTutor}
-                        onSaveCarinho={handleSaveCarinho}
-                        onClose={() => {
-                            setIsCarinhoOpen(false);
-                            setInitialCarinhoTutor(null);
-                        }} 
-                    />
-
-                    {showCarinhoToastCard && !isCarinhoOpen && (
-                        <div className="fixed bottom-6 right-6 z-50 max-w-[340px] w-full bg-[#fff1f5] border-2 border-rose-200 rounded-[2rem] p-5 shadow-2xl no-print">
-                            <button 
-                                onClick={() => setShowCarinhoToastCard(false)}
-                                className="absolute top-4 right-4 p-1 text-rose-400 hover:text-rose-700 transition"
-                                title="Fechar aviso"
-                            >
-                                <IconX />
-                            </button>
-
-                            <div className="flex items-center gap-3">
-                                <div className="w-11 h-11 rounded-full bg-rose-500 text-white flex items-center justify-center shrink-0 shadow-md shadow-rose-200">
-                                    <IconHeart fill="white" />
-                                </div>
-                                <div className="overflow-hidden">
-                                    <h3 className="text-base font-extrabold text-rose-950 leading-tight">Mande um carinho!</h3>
-                                    <p className="text-[11px] font-semibold text-rose-500">Para um Tutor do programa</p>
-                                </div>
-                            </div>
-
-                            <p className="text-xs text-rose-900/80 font-medium mt-3 leading-relaxed">
-                                Os Tutores dedicam seu tempo em orientar e apoiar os formadores e cursistas. Que tal enviar um gesto de carinho para agradecer? É super rápido e faz a diferença!
-                            </p>
-
-                            <button 
-                                onClick={() => {
-                                    setInitialCarinhoTutor(null);
-                                    setIsCarinhoOpen(true);
-                                }}
-                                className="mt-4 w-full py-3 bg-gradient-to-r from-rose-500 to-pink-500 hover:from-rose-600 hover:to-pink-600 text-white rounded-2xl font-extrabold text-xs shadow-lg shadow-rose-200 transition-all active:scale-95 flex items-center justify-center gap-1.5"
-                            >
-                                <span>Escolher Tutor</span>
-                                <span>💛</span>
-                            </button>
+                <div className="min-h-screen p-4 md:p-10 print:bg-white print:p-2 flex flex-col justify-between">
+                    {/* Toast de Confirmação */}
+                    {toastMessage && (
+                        <div className="fixed bottom-6 right-6 z-[150] bg-slate-900 text-white px-5 py-3.5 rounded-2xl shadow-2xl flex items-center gap-3 text-xs font-extrabold animate-bounce no-print border border-slate-700">
+                            <span>✨</span>
+                            <span>{toastMessage}</span>
                         </div>
                     )}
-                    
-                    <div className="max-w-[1700px] mx-auto mb-10 flex flex-col xl:flex-row xl:items-end justify-between gap-6 border-b border-slate-300 pb-8 no-print">
-                        <div className="flex flex-col sm:flex-row sm:items-center gap-5">
+
+                    {/* Modais */}
+                    <DetailsModal 
+                        item={selectedItem} 
+                        type={selectedType} 
+                        onClose={() => setSelectedItem(null)} 
+                        reactions={reactions}
+                    />
+
+                    <MandeCarinhoModal 
+                        isOpen={isCarinhoOpen} 
+                        onClose={() => setIsCarinhoOpen(false)} 
+                        nres={nresData} 
+                        onSendCarinho={handleSendCarinho}
+                        reactions={reactions}
+                    />
+
+                    {/* Barra Superior / Header */}
+                    <div className="max-w-[1700px] mx-auto w-full mb-10 flex flex-col lg:flex-row lg:items-center justify-between gap-6 border-b border-slate-200 pb-8 no-print">
+                        <div className="flex items-center gap-5">
+                            {/* Logo oficial do Programa Formadores em Ação */}
                             <img 
                                 src="https://lh3.googleusercontent.com/d/1dxKM7C_oDPbtE6YNYFTGCZ_55n1IlZg-" 
-                                alt="Logo Formadores em Ação" 
-                                className="h-16 md:h-20 w-auto object-contain shrink-0"
-                                onError={(e) => {
-                                    e.currentTarget.onerror = null;
-                                    e.currentTarget.src = "https://drive.google.com/uc?export=view&id=1dxKM7C_oDPbtE6YNYFTGCZ_55n1IlZg-";
-                                }}
+                                alt="Formadores em Ação" 
+                                className="h-16 md:h-20 w-auto object-contain"
+                                onError={(e) => { e.target.src = 'https://drive.google.com/uc?export=view&id=1dxKM7C_oDPbtE6YNYFTGCZ_55n1IlZg-'; }}
                             />
                             <div>
-                                <div className="flex items-center gap-3 mb-2">
-                                    <span className="w-3 h-3 rounded-full bg-[#008744]"></span>
-                                    <span className="text-xs font-black tracking-widest uppercase text-slate-500">Secretaria de Estado da Educação do Paraná</span>
-                                </div>
-                                <h1 className="text-2xl md:text-3xl font-black text-slate-900 uppercase tracking-tighter">
-                                    Organograma da Tutoria de Formação • 32 NREs
+                                <span className="text-[11px] font-black tracking-widest text-emerald-700 uppercase block">
+                                    Secretaria de Estado da Educação do Paraná
+                                </span>
+                                <h1 className="text-xl md:text-2xl font-black text-slate-900 uppercase tracking-tight">
+                                    Tutoria de Formação nos 32 NREs
                                 </h1>
                             </div>
                         </div>
 
+                        {/* Barra de Pesquisa, Zoom e Ação */}
                         <div className="flex flex-wrap items-center gap-4">
+                            {/* Botão de Atalho "Mande um Carinho" */}
                             <button 
-                                onClick={() => {
-                                    setInitialCarinhoTutor(null);
-                                    setIsCarinhoOpen(true);
-                                }}
-                                className="py-3.5 px-5 bg-gradient-to-r from-rose-500 to-pink-500 hover:from-rose-600 hover:to-pink-600 text-white rounded-3xl text-xs font-black uppercase tracking-wider shadow-md shadow-rose-200 transition active:scale-95 flex items-center gap-2"
+                                onClick={() => setIsCarinhoOpen(true)}
+                                className="px-5 py-3.5 rounded-3xl bg-gradient-to-r from-rose-500 to-pink-500 hover:from-rose-600 hover:to-pink-600 text-white font-black text-xs uppercase tracking-wider shadow-lg shadow-rose-200 transition-all flex items-center gap-2 active:scale-95"
                             >
-                                <IconHeart fill="white" />
-                                <span>Mande um Carinho 💛</span>
+                                <span>❤️</span>
+                                <span>Mande um carinho!</span>
                             </button>
 
-                            <div className="relative group">
-                                <div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"><IconSearch /></div>
+                            {/* Campo de Busca */}
+                            <div className="relative">
+                                <div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400">
+                                    <IconSearch />
+                                </div>
                                 <input 
                                     type="text" 
-                                    placeholder="Pesquisar NRE ou Tutor..." 
-                                    className="pl-12 pr-6 py-3.5 bg-white border-2 border-slate-200 rounded-3xl w-72 sm:w-80 focus:border-blue-500 outline-none shadow-sm transition-all text-slate-700 text-sm font-semibold" 
-                                    value={searchTerm} 
-                                    onChange={(e) => setSearchTerm(e.target.value)} 
+                                    placeholder="Pesquisar tutor ou NRE..." 
+                                    value={searchTerm}
+                                    onChange={(e) => setSearchTerm(e.target.value)}
+                                    className="pl-12 pr-6 py-3.5 bg-white border-2 border-slate-200 rounded-3xl w-72 md:w-80 focus:border-emerald-500 outline-none shadow-sm text-slate-700 text-sm font-semibold transition-all"
                                 />
                             </div>
 
-                            <button 
-                                onClick={() => setForceExpanded(!forceExpanded)}
-                                className="py-3.5 px-5 bg-white border-2 border-slate-200 text-slate-700 hover:bg-slate-50 rounded-3xl text-xs font-black uppercase tracking-wider shadow-sm transition active:scale-95"
-                            >
-                                {forceExpanded ? 'Recolher Todos' : 'Expandir Todos'}
-                            </button>
-
-                            <div className="flex bg-white rounded-3xl border-2 border-slate-200 p-1.5 shadow-sm">
-                                <button onClick={() => setZoom(Math.max(zoom - 0.1, 0.4))} className="p-2.5 hover:bg-slate-50 rounded-2xl text-slate-600"><IconZoomOut /></button>
-                                <button onClick={() => setZoom(1)} className="p-2.5 font-black text-xs text-slate-500 px-3 uppercase">100%</button>
-                                <button onClick={() => setZoom(Math.min(zoom + 0.1, 1.5))} className="p-2.5 hover:bg-slate-50 rounded-2xl text-slate-600"><IconZoomIn /></button>
+                            {/* Controles de Zoom e Impressão */}
+                            <div className="flex items-center gap-2">
+                                <div className="flex bg-white rounded-3xl border-2 border-slate-200 p-1.5 shadow-sm">
+                                    <button onClick={() => setZoom(Math.max(zoom - 0.1, 0.4))} className="p-2.5 hover:bg-slate-50 rounded-2xl text-slate-600" title="Diminuir Zoom"><IconZoomOut /></button>
+                                    <button onClick={() => setZoom(1)} className="px-3 font-black text-xs text-slate-400 uppercase" title="Tamanho Padrão">100%</button>
+                                    <button onClick={() => setZoom(Math.min(zoom + 0.1, 1.4))} className="p-2.5 hover:bg-slate-50 rounded-2xl text-slate-600" title="Aumentar Zoom"><IconZoomIn /></button>
+                                </div>
+                                <button onClick={handlePrint} className="p-3.5 bg-slate-900 text-white rounded-3xl shadow-md hover:bg-slate-800 active:scale-95" title="Imprimir Organograma">
+                                    <IconPrinter />
+                                </button>
                             </div>
-
-                            <button onClick={handlePrint} className="p-4 bg-slate-900 text-white rounded-3xl shadow-lg hover:bg-slate-800 active:scale-95 transition" title="Imprimir / Salvar PDF">
-                                <IconPrinter />
-                            </button>
                         </div>
                     </div>
 
-                    <div style={{ transform: `scale(${zoom})`, transformOrigin: 'top center' }} className="max-w-[1700px] mx-auto w-full print-full transition-transform duration-150">
+                    {/* Área do Organograma com Zoom */}
+                    <div style={{ transform: `scale(${zoom})`, transformOrigin: 'top center' }} className="max-w-[1700px] mx-auto w-full transition-transform duration-200 print-full">
+                        
+                        {/* Topo Hierárquico do Organograma */}
                         <div className="flex flex-col items-center mb-16 relative">
+                            {/* Card Central */}
                             <div 
-                                style={{ borderTop: `8px solid ${COLORS.navy}` }} 
-                                className="bg-white p-8 rounded-[2.5rem] shadow-xl border border-slate-200 text-center w-full max-w-[620px] relative z-10 print:shadow-none print:border-t-4"
+                                style={{ borderTop: `8px solid ${COLORS.seedGreen}` }}
+                                className="bg-white p-8 rounded-[2.5rem] shadow-xl border border-slate-200 text-center w-full max-w-md relative z-10 print:shadow-none"
                             >
-                                <h1 className="text-2xl sm:text-3xl font-black text-slate-900 uppercase tracking-tighter leading-none mt-1">
+                                <h2 className="text-2xl font-black text-slate-900 uppercase tracking-tight">
                                     Programa Formadores em Ação
-                                </h1>
-                                <p className="text-xs font-black text-blue-700 uppercase tracking-widest mt-2">
-                                    Tutoria de Formação nos 32 Núcleos Regionais de Educação
+                                </h2>
+                                <p className="text-xs font-bold text-slate-500 mt-1 uppercase tracking-wider">
+                                    Rede dos 32 Núcleos Regionais de Educação
                                 </p>
-                                
-                                <div className="grid grid-cols-2 gap-4 mt-6 pt-6 border-t border-slate-100 text-center max-w-sm mx-auto">
-                                    <div className="p-3 bg-slate-50 rounded-2xl">
-                                        <span className="block text-[11px] text-slate-400 font-bold uppercase tracking-wider">Núcleos</span>
-                                        <span className="text-lg font-black text-slate-800">32 NREs</span>
+
+                                {/* Indicadores */}
+                                <div className="mt-6 grid grid-cols-2 gap-3 pt-6 border-t border-slate-100">
+                                    <div className="p-3 bg-slate-50 rounded-2xl border border-slate-100">
+                                        <span className="text-2xl font-black text-slate-800">32</span>
+                                        <p className="text-[10px] font-black uppercase text-slate-400 tracking-wider">Núcleos (NREs)</p>
                                     </div>
-                                    <div className="p-3 bg-slate-50 rounded-2xl">
-                                        <span className="block text-[11px] text-slate-400 font-bold uppercase tracking-wider">Tutores</span>
-                                        <span className="text-lg font-black text-blue-700">{totalTutores} Ativos</span>
+                                    <div className="p-3 bg-slate-50 rounded-2xl border border-slate-100">
+                                        <span className="text-2xl font-black text-emerald-600">{totalTutores}</span>
+                                        <p className="text-[10px] font-black uppercase text-slate-400 tracking-wider">Tutores Ativos</p>
                                     </div>
                                 </div>
                             </div>
 
-                            <div className="h-14 w-1.5 bg-slate-300 no-print" />
+                            {/* Linha vertical conectando à rede dos 32 NREs */}
+                            <div className="h-12 w-1 bg-slate-300 no-print"></div>
                         </div>
 
-                        <div className="relative">
-                            {filteredNres.length === 0 ? (
-                                <div className="text-center py-16 bg-white rounded-3xl border border-slate-200 p-8">
-                                    <p className="text-sm font-bold text-slate-500 uppercase">Nenhum NRE ou tutor encontrado para os critérios pesquisados.</p>
-                                </div>
-                            ) : (
-                                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-6 items-start justify-items-center print:block">
-                                    {filteredNres.map(nre => (
-                                        <div key={nre.id} className="w-full print:block print:mb-8">
-                                            <NreCard 
-                                                nre={nre} 
-                                                searchTerm={searchTerm} 
-                                                onSelect={handleSelect}
-                                                forceExpanded={forceExpanded}
-                                                stats={carinhosStats}
-                                            />
-                                        </div>
-                                    ))}
-                                </div>
-                            )}
+                        {/* Grade com os 32 NREs e seus Tutores */}
+                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 items-start">
+                            {nresData.map(nre => (
+                                <NreColumn 
+                                    key={nre.id} 
+                                    nre={nre} 
+                                    searchTerm={searchTerm} 
+                                    onSelect={(item, type) => {
+                                        setSelectedItem(item);
+                                        setSelectedType(type);
+                                    }} 
+                                />
+                            ))}
                         </div>
-
                     </div>
 
                     {/* Rodapé Institucional */}
-                    <footer className="mt-16 pt-8 pb-6 border-t border-slate-300 text-center text-slate-500 text-xs no-print">
-                        <div className="max-w-5xl mx-auto px-4 space-y-1.5 font-medium leading-relaxed">
-                            <p className="font-extrabold text-slate-700 tracking-tight text-[13px]">
-                                Núcleo Formadores em Ação - Secretaria de Estado de Educação do Paraná
-                            </p>
-                            <p className="text-slate-500">
-                                Av. Presidente Kennedy, 2511 - Guaíra - Curitiba | PR
-                            </p>
-                            <p className="text-slate-600">
-                                Contato: <a href="mailto:seed_formadores@escola.pr.gov.br" className="font-bold text-blue-700 hover:underline">seed_formadores@escola.pr.gov.br</a>
-                            </p>
-                        </div>
+                    <footer className="mt-20 pt-8 border-t border-slate-200 text-center text-xs text-slate-500 font-semibold no-print">
+                        <p>
+                            Núcleo Formadores em Ação - Secretaria de Estado de Educação do Paraná | Av. Presidente Kennedy, 2511 - Guaíra - Curitiba | PR | Contato: seed_formadores@escola.pr.gov.br
+                        </p>
                     </footer>
                 </div>
             );
